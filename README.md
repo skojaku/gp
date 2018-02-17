@@ -92,7 +92,7 @@ cids = gp(A, 'dcsbm',2)
    * -a=[A] - Specify one of the following algorithms. (Default: 'kl')
      * 'kl': Kernighan-Lin algorithm
      * 'mcmc': Markov chain monte carlo algorithm
-   * q: Quality function. (Default: 'dcsbm') 
+   * -q: Quality function. (Default: 'dcsbm') 
 	    - 'qint': average degree of each community
 	    - 'qext': ratio cut
 	    - 'qcnd': normalised cut

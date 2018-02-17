@@ -197,7 +197,7 @@ void usage()
          << "	    - kl: Kernighan-Lin algorithm" << endl
          << "	    - mcmc: Markov chain monte carlo algorithm" << endl
          << endl\
-         << "	\e[1m-a=[Q]\e[0m Specify one of the following quality functions:" << endl
+         << "	\e[1m-q=[Q]\e[0m Specify one of the following quality functions:" << endl
          << "	    - qint: average degree of each community" << endl
          << "	    - qext: ratio cut" << endl
          << "	    - qcnd: normalised cut" << endl

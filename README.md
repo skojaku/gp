@@ -1,7 +1,16 @@
 # gp
-Graph partitioning algorithms
+C++ and MATLAB codes for community detetion algorithms in networks.
 
-C++ and MATLAB codes for community detetion algorithms in networks. 
+Available algorithms
+ * Kernighan-Lin algorithm  
+ * Markov chain monte carlo 
+
+Available quality functions
+ * Internal average degree 
+ * Ratio cut criterion
+ * Normalised cut criterion
+ * Modularity 
+ * Degree-corrected stochastic block model 
 
 
 # Contents

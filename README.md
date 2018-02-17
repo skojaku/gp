@@ -12,21 +12,6 @@ Available quality functions
  * Modularity 
  * Degree-corrected stochastic block model 
 
-
-# Contents
-  
- * README.md - README file	
- * makefile - Script for instal 
- * example.m - Test code for MATLAB
- * src/ - C++ codes:
-    * src/comalgorithms.h - Header file for community detection algorithms 
-    * src/kernighan_lin.h - Codes for the Kernighan-Lin algorithm 
-    * src/mcmc.h - Codes for the Markov chain monte carlo algorithm 
-    * src/quality_functions.h - Codes for quality functions 
-    * src/gp.h - Header file for gp_mex.cpp and gp_cl.cpp
-    * src/gp_cl.cpp - Codes for the command-line client 
-    * src/gp_mex.cpp - Codes for the MATLAB client 
-  
 # Installation
 
   To install, run 

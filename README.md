@@ -14,18 +14,25 @@ Available quality functions
 
 # Installation
 
-  To install, run 
+To install, run 
 
 ```bash 
 make 
 ```
 
+
+This creates the following two files:
+ * gp - command-line crient
+ * gp_mex.mexa64 - mex file (the file extension may be different depending on OS)
+
+For MATLAB user, copy gp.m and gp_mex.mexa64 to your working directly. 
+
 # Usage
 
 ## Matlab
  
-```python
-ids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
+```Matlab
+cids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
 ```
  
 #### Input 
@@ -50,7 +57,7 @@ ids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
   
 #### Example (examples/example1.m)
   
-```matlab
+```Matlab
 T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
 T = table2array(T);
 N = max([max(T(:,2)),max(T(:,1))]);

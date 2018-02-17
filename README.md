@@ -57,13 +57,13 @@ ids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
 #### Example (examples/example1.m)
   
 ```matlab
-	T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
-	T = table2array(T);
-	N = max([max(T(:,2)),max(T(:,1))]);
-	A = sparse(T(:,1), T(:,2), T(:,3), N,N);
-	[r,c,v] = find(triu(A,1));
+T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
+T = table2array(T);
+N = max([max(T(:,2)),max(T(:,1))]);
+A = sparse(T(:,1), T(:,2), T(:,3), N,N);
+[r,c,v] = find(triu(A,1));
 
-	cids = gp(A, 'dcsbm',2)
+cids = gp(A, 'dcsbm',2)
 ```
 
 ## C++
@@ -73,30 +73,6 @@ ids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
 ```
  
 ./gp seeks non-overlapping communities in the network given by [input-file] and saves the detected communities in [output-file].
-
-	[1m[output_file][0m
-	    This file describes the detected core-periphery pairs (tab-separated value file).
-	    The first column is the ID of each node.
-	    The second column is the index of the community to which each node belongs.
-
-
-[1mOPTIONS:[0m
-
-	[1m-r=[R][0m  Run the algorithm R times. (Default: 10)
-
-	[1m-a=[ALG][0m Specify one of the following algorithms
-	    - kl: Kernighan-Lin algorithm
-	    - mcmc: Markov chain monte carlo algorithm
-
-	[1m-a=[Q][0m Specify one of the following quality functions:
-	    - qint: average degree of each community
-	    - qext: ratio cut
-	    - qcnd: normalised cut
-	    - qmod: modularity
-	    - dcsbm: dcSBM
-
-	[1m-k=[K][0m  Set the number of communities to K. (Default: 2)
-
 
 #### Input 
  

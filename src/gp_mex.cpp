@@ -62,8 +62,8 @@ void mexFunction(int nlhs, mxArray* plhs[],
     // repeat com detect num_of_runs times 
     double Qr = -numeric_limits<double>::max();
     for (int r = 0; r < num_of_runs; r++) {
+       	cout<<r<<endl; 
         vector<vector<bool>> xlist_tmp(K, vector<bool>(N, false) );
-        
     	community_detection[alg_name](A, W, xlist_tmp);
     
         double Qi = mcmc_qfunc(A, W, xlist_tmp);

@@ -184,7 +184,7 @@ void usage()
          << endl;
 
     cout << "	\e[1m[output_file]\e[0m" << endl;
-    cout << "	    This file describes the detected core-periphery pairs (tab-separated value file)." << endl;
+    cout << "	    This file describes the detected communities (tab-separated value file)." << endl;
     cout << "	    The first column is the ID of each node." << endl;
     cout << "	    The second column is the index of the community to which each node belongs." << endl
          << endl

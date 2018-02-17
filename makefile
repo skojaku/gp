@@ -2,7 +2,8 @@
 .PHONY: all
 
 MEXFLAGS := -fopenmp
-MEXOFLAGS := -O3
+MEXOFLAGS := 
+#MEXOFLAGS := -O3
 CC := g++
 
 #CFLAGS := -O3 -std=c++11 # use this option in case openmp is not working 

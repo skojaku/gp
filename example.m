@@ -1,23 +1,11 @@
-function test()
+function example()
 
-	T = readtable('links_karate.dat', 'Delimiter', '\t');
-	N = max([max(T.source),max(T.target)]);
-	A = sparse(T.source, T.target, T.value, N,N);
-	 
+	T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
+	T = table2array(T);
+	N = max([max(T(:,2)),max(T(:,1))]);
+	A = sparse(T(:,1), T(:,2), T(:,3), N,N);
 	[r,c,v] = find(triu(A,1));
 
+	cids = gp(A, 'dcsbm',2)
 	
-	numRun = 30;
-	K = 2;
-	qfunc = 'dcsbm';
-	algorithm = 'kl';
- 	
-	[cids, Qs] = graph_partitioning_mex([r,c,v], size(A,1), length(r), K, numRun, qfunc, algorithm);
-	sum(Qs)
-	Qs
-	C = sparse(1:length(cids),cids,1);
-	Q = sum(Qs);
-	score = ones(N,1) * Q/N;
-	
-	full(C)
 end

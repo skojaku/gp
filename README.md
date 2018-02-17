@@ -55,7 +55,7 @@ cids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
 
  * `cids` - Column vector of length N, where N is the number of nodes. cids[i] is the index of the community to which node i belongs. 
   
-#### Example (examples/example1.m)
+#### Example example.m
   
 ```Matlab
 T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
@@ -99,7 +99,7 @@ cids = gp(A, 'dcsbm',2)
 	    - 'qmod': modularity
 	    - 'dcsbm': dcSBM
   
-#### Example (examples/example.m)
+#### Example
   
 ```bash
 ./gp links_karate.dat result.dat -k 3 -a 'kl' -q 'dcsbm' -r 1

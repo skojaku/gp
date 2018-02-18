@@ -1,6 +1,6 @@
 function [cids,Qs] = gp(varargin)
 	Defaults = {[],'dcsbm',2,1,'kl'};
-	Defaults(1:nargin) = varargin
+	Defaults(1:nargin) = varargin;
 
 	A = Defaults{1};
 	qfunc = Defaults{2};

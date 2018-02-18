@@ -39,19 +39,13 @@ void run_kl(
 	
 	// assign empty nodes
 	for(int i = 0; i < N; i++){
-		int cid = -1;
+		C[i] = i % K;
+	}
+		
+	 random_shuffle( C.begin(), C.end());
 	
-		for(int k = 0; k < K; k++){
-			if(!xlist[k][i]) continue;
-			cid = k;
-			C[i] = k;
-			break;
-		}
-		if(cid<0){
-			cid = std::uniform_int_distribution<>(0, K-1)(mtrnd);
-			C[i] = cid;
-			xlist[cid][i] = true;
-		}
+	for(int i = 0; i < N; i++){
+		xlist[C[i]][i] = true;
 	}
 
 	// best quality

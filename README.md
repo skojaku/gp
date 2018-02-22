@@ -2,21 +2,21 @@
 C++ and MATLAB codes for community-detetion algorithms in networks.
 
 I implemented the following optimisation algorithms for community detection:
- * Kernighan-Lin algorithm [\[1\]](https://en.wikipedia.org/wiki/Kernighan%E2%80%93Lin_algorithm)["2"](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107) 
- * Markov chain monte carlo algorithm ["3"](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo) 
- * Louvain algorithm ["4"](http://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta)
+ * Kernighan-Lin algorithm \[[1](https://en.wikipedia.org/wiki/Kernighan%E2%80%93Lin_algorithm), [2](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\] 
+ * Markov chain monte carlo algorithm \[[3](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo)\] 
+ * Louvain algorithm \[[4](http://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta)\]
 
 These algorithms seek communities in networks by optimising the following quality functions: 
- * Internal average degree ["5"](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177) 
- * Ratio cut criterion ["5"](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)
- * Normalised cut criterion ["5"](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)
- * Modularity ["6"](http://www.pnas.org/content/103/23/8577)
- * Log likelyhood for the degree-corrected stochastic block model ["2"](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)
+ * Internal average degree \[[5](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
+ * Ratio cut criterion \[[5](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
+ * Normalised cut criterion \[[5](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
+ * Modularity \[[6](http://www.pnas.org/content/103/23/8577)\]
+ * Log likelyhood for the degree-corrected stochastic block model \[[2](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\]
 
 Some detected communities may be insignificant.
 Indeed, the community-detection algorithms detect communities even if there is no community in networks.
 Therefore, it is important to check the significance of each detected community.
-I implemented the (q,s)-test ["7"](https://arxiv.org/abs/1712.00298) to compute the statistical significance of the detected communities.  
+I implemented the (q,s)-test \[[7](https://arxiv.org/abs/1712.00298)\] to compute the statistical significance of the detected communities.  
 
 # Installation
 

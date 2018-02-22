@@ -11,7 +11,7 @@ These algorithms seek communities in networks by optimising the following qualit
  * Ratio cut criterion \[[5](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
  * Normalised cut criterion \[[5](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
  * Modularity \[[6](http://www.pnas.org/content/103/23/8577)\]
- * Log likelyhood for the degree-corrected stochastic block model \[[2](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\]
+ * Log likelihood for the degree-corrected stochastic block model \[[2](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\]
 
 Some detected communities may be insignificant.
 Indeed, the community-detection algorithms detect communities even if there is no community in networks.
@@ -64,6 +64,7 @@ cids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
  * `algorithm` (optional) - Optimisation algorithm. Default algorithm = 'kl'. The following algorithms are available: 
    * kl - Kernighan-Lin algorithm 
    * mcmc - Markov chain monte carlo 
+   * louvain - Markov chain monte carlo 
 　
   
 #### Output 
@@ -103,23 +104,22 @@ cids = gp(A, 'dcsbm',2)
    * The second column is the index of the community to which each node belongs.
  * `[options]` - Options 
    * -k=[K] Set the number of communities to K. (Default: 2)
-   * -r=[R] - Run the algorithm R times. (Default: 10)
-   * -a=[A] - Specify one of the following algorithms. (Default: 'kl')
+   * -r=[R] Run the algorithm R times. (Default: 10)
+   * -l=[A] Specify one of the following algorithms. (Default: 'kl')
      * 'kl': Kernighan-Lin algorithm
      * 'mcmc': Markov chain monte carlo algorithm
+     * 'louvain': Louvain algorithm 
    * -q: Quality function. (Default: 'dcsbm') 
 	    - 'qint': average degree of each community
 	    - 'qext': ratio cut
 	    - 'qcnd': normalised cut
 	    - 'qmod': modularity
 	    - 'dcsbm': dcSBM
-   * -a=[ALPHA] Set significance level ALPHA. (Default: 1, i.e., statistical test is disabled)
+   * -a=[ALPHA] Set significance level ALPHA. (Default: 0.05. Set 1 to disable the statistical test)
    * -l=[NUM] Set the number of randomised networks to NUM. (Default: 500)
-   * -s=[S] Specify one of the following size functions (if you carry out the statistical test):
-     * nodes: number of nodes in a community
-     * edges: number of edges incident to a community
-
-
+   * -s=[S] Specify one of the following size functions:
+	    - 'nodes': number of nodes in a community
+	    - 'edges': number of edges incident to a community
   
 #### Example
   

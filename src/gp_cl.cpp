@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
     int num_of_rand_nets = 500; 
     int num_of_runs = 10;
     int K = 2;
-    double alpha = 1;
+    double alpha = 0.05;
 
     int opt;
     opterr = 0;
@@ -235,6 +235,7 @@ void usage()
          << "	\e[1m-o=[ALG]\e[0m Specify one of the following optimisation algorithms" << endl
          << "	    - kl: Kernighan-Lin algorithm" << endl
          << "	    - mcmc: Markov chain monte carlo algorithm" << endl
+         << "	    - louvain: Louvain algorithm" << endl
          << endl\
          << "	\e[1m-q=[Q]\e[0m Specify one of the following quality functions:" << endl
          << "	    - qint: average degree of each community" << endl
@@ -245,7 +246,7 @@ void usage()
          << endl
          << "	\e[1m-k=[K]\e[0m  Set the number of communities to K. (Default: 2)" << endl
          << endl
-         << "	\e[1m-a=[ALPHA]\e[0m  Set significance level ALPHA. (Default: 1, i.e., statistical test is disabled)" << endl
+         << "	\e[1m-a=[ALPHA]\e[0m  Set significance level ALPHA. (Default: 0.05. Set 1 to disable the statistical test)" << endl
          << endl
          << "	\e[1m-l=[NUM]\e[0m  Set the number of randomised networks to NUM. (Default: 500)" << endl
          << endl

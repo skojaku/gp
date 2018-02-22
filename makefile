@@ -23,4 +23,4 @@ qstest_mex.mexa64: ./src/qstest/* ./src/qstest_mex.cpp ./src/community-detection
 
 .PHONY: clean
 clean:
-	$(RM) *.mexa64 
+	$(RM) *.mexa64 ./gp qstest_mex.mexa64  

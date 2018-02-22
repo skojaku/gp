@@ -47,29 +47,40 @@ sudo apt-get install libstdc++6
 ## Matlab
  
 ```Matlab
-cids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
+g = gp(); 
+param = g.init(); % initialise
+[cids, qs, h, pvals] = g.detect(adjmat, param) % Community detection
 ```
  
 #### Input 
 
- * `adjmat` - Adjacency matrix 
- * `K` (optional) - Number of communities. Default K=2. 
- * `qfunc` (optional) - Quality function for communities. Default qfunc= 'dcsbm'. The following quality functions are available:
-   * qmod - Contribution of a community to the modularity 
-   * qint - Internal average degree 
-   * qexp - Expansion　
-   * qcnd - Conductance
-   * dcsbm - Degree-corrected stochastic block model
- * `num_of_runs` (optional) - Number of runs. Default num_of_runs = 1. 
- * `algorithm` (optional) - Optimisation algorithm. Default algorithm = 'kl'. The following algorithms are available: 
-   * kl - Kernighan-Lin algorithm 
-   * mcmc - Markov chain monte carlo 
-   * louvain - Markov chain monte carlo 
+ * `adjmat` - Adjacency matrix
+ * `param` - Configurations of community detection and statistical test. 
+   * `param.qfunc` - Quality function for communities. Default qfunc= 'dcsbm'. The following quality functions are available:
+     * qmod - Contribution of a community to the modularity 
+     * qint - Internal average degree 
+     * qexp - Expansion　
+     * qcnd - Conductance
+     * dcsbm - Degree-corrected stochastic block model
+   * `param.algorithm` - Optimisation algorithm. Default algorithm = 'kl'. The following algorithms are available: 
+     * kl - Kernighan-Lin algorithm 
+     * mcmc - Markov chain monte carlo 
+     * louvain - Markov chain monte carlo 
+   * `param.K` - Number of communities. Default K=2. 
+   * `param.num_of_runs` - Number of runs. Default num_of_runs = 1. 
+   * `param.significance_level` - Significance level. Default significance_level = 0.05.
+   * `param.sfunc` - Size of community. The following size functions are available:
+     * nodes - Number of nodes in a community 
+     * edges - Number of edges incident to a community 
+   * `param.num_of_rand_nets` - Number of randomised networks. Default num_of_rand_nets = 500. 
 　
   
 #### Output 
 
  * `cids` - Column vector of length N, where N is the number of nodes. cids[i] is the index of the community to which node i belongs. 
+ * `qs` - Column vector of length K, where qs[k] is the quality value for the kth community. 
+ * `h` - Column vector of length N, where h[i] = 1 or h[i] = 0 indicates that the node i belongs to the significant community, respectively.  
+ * `pvals` - Column vector of length K, pvals[k] is the p-value of the kth community.  
   
 #### Example example.m
   
@@ -77,10 +88,11 @@ cids = gp(adjmat, qfunc='dcsbm', K=2, num_of_runs=1, algorithm='kl')
 T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
 T = table2array(T);
 N = max([max(T(:,2)),max(T(:,1))]);
-A = sparse(T(:,1), T(:,2), T(:,3), N,N);
-[r,c,v] = find(triu(A,1));
+A = sparse(T(:,1), T(:,2), T(:,3), N, N);
 
-cids = gp(A, 'dcsbm',2)
+g = gp();
+param = g.init(); % initialise
+cids = g.detect(A, param);
 ```
 
 ## C++

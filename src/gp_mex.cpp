@@ -5,7 +5,7 @@
 
 #include "gp.h"
 #include "quality_functions.h"
-#include "comalgorithms.h"
+#include "community-detection-algorithms/comalgorithms.h"
 
 void init_random_number_generator(){
     	int seeds[624];
@@ -52,7 +52,6 @@ void mexFunction(int nlhs, mxArray* plhs[],
             W[cid].push_back(w);
         }
     }
- 
     /* Detect K communities in networks */
     init_random_number_generator();
     mcmc_qfunc = quality_functions[qfunc_name];
@@ -74,6 +73,8 @@ void mexFunction(int nlhs, mxArray* plhs[],
         }
     }
 
+    K = xlist.size();	
+  
     /* Save results*/
     plhs[0] = mxCreateDoubleMatrix((mwSize)N, (mwSize)1, mxREAL);
     plhs[1] = mxCreateDoubleMatrix((mwSize)K, (mwSize)1, mxREAL);

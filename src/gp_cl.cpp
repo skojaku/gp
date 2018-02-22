@@ -19,7 +19,8 @@
 #include <cfloat>
 #include "gp.h"
 #include "quality_functions.h"
-#include "comalgorithms.h"
+#include "community-detection-algorithms/comalgorithms.h"
+#include "qstest/qstest.cpp"
 
 #include <string>
 #include <stdio.h>
@@ -32,7 +33,7 @@ void split(const string& s, char c,
 
 void readEdgeTable(string filename, vector<vector<int> >& A, vector<vector<double>>& W, int& N);
 
-void writeLabels(const string filename, const vector<vector<bool>>& xlist);
+void writeLabels(const string filename, const vector<vector<bool>>& xlist, const vector<double>p_values, double alpha);
 
 void usage();
 
@@ -71,21 +72,32 @@ int main(int argc, char* argv[])
 
     string linkfile = argv[1];
     string outputfile = argv[2];
-
+	
+    int num_of_rand_nets = 500; 
     int num_of_runs = 10;
     int K = 2;
+    double alpha = 1;
 
     int opt;
     opterr = 0;
     string tmp;
     string alg_name = "kl";
     string qfunc_name = "dcsbm";
-    while ((opt = getopt(argc, argv, "h:k:r:a:q:")) != -1) {
+    string sfunc_name = "edges";
+    while ((opt = getopt(argc, argv, "h:k:r:a:q:s:o:l")) != -1) {
         switch (opt) {
         case 'h':
             usage();
             break;
+        case 's':
+            tmp.assign(optarg);
+            sfunc_name = tmp.c_str();
+            break;
         case 'a':
+            tmp.assign(optarg);
+            alpha = atof(tmp.c_str());
+            break;
+        case 'o':
             tmp.assign(optarg);
             alg_name = tmp.c_str();
             break;
@@ -96,6 +108,10 @@ int main(int argc, char* argv[])
         case 'r':
             tmp.assign(optarg);
             num_of_runs = atoi(tmp.c_str());
+            break;
+        case 'l':
+            tmp.assign(optarg);
+            num_of_rand_nets = atoi(tmp.c_str());
             break;
         case 'k':
             tmp.assign(optarg);
@@ -108,26 +124,26 @@ int main(int argc, char* argv[])
     }
 
     cout << "===================" << endl;
-    cout << "# algorithm: "<< alg_name<< endl;
-    cout << "# quality function: "<< qfunc_name<< endl;
-    cout << "# Number of runs: "<< num_of_runs<< endl;
-    cout << "# Number of communities: "<< K<< endl;
     cout << "# input file:  "<< linkfile<< endl;
     cout << "# output file: "<< outputfile<< endl;
     cout << "" << endl;
   
     cout << "# Status: "<< endl;
-    cout << "    Reading input file...";
+    cout << "   Reading input file...";
     /* Read file */
     int N;
     vector<vector<int> > A;
     vector<vector<double>> W;
     readEdgeTable(linkfile, A, W, N);
-    cout <<"end"<<endl;
+    cout <<"end"<<endl<<endl;
       
 
     /* Detect communities in networks */
-    cout << "    Seeking communities...";
+    cout << "   Seeking communities..."<<endl;
+    cout << "      - algorithm: "<< alg_name<< endl;
+    cout << "      - quality function: "<< qfunc_name<< endl;
+    cout << "      - Number of runs: "<< num_of_runs<< endl;
+    cout << "      - Number of communities: "<< K<< endl;
     init_random_number_generator();
     vector<vector<bool>> xlist;
     double Qr = -numeric_limits<double>::max();
@@ -144,12 +160,35 @@ int main(int argc, char* argv[])
             xlist = xlist_tmp;
         }
     }
-    cout <<"end"<<endl;
+    cout <<"   end"<<endl<<endl;
+	
+    /* Significance test */
+    K = xlist.size();
+    double corrected_alpha =1.0 - pow(1.0 - alpha, 1.0 / (double)K); // Sidak correction.
+    vector<double> p_values(K, 0.0);
+    vector<int> nhat;
+    vector<double> qhat;
+    if(alpha < 1){
+    	cout << "   Significance test..."<<endl;
+    	cout << "      - size function: "<< sfunc_name<< endl;
+    	cout << "      - number of random networks: "<< num_of_rand_nets<< endl;
+    	cout << "      - significance level: "<< alpha<< endl;
+    	cout << "      - corrected-significance level: "<< corrected_alpha<< endl;
+    	cout << "      - number of communities under testing: "<< K<< endl;
+        fill(p_values.begin(), p_values.end(), 0.0);
+        mcmc_qfunc = quality_functions[qfunc_name];
+        mcmc_qfunc_ind = quality_functions_ind[qfunc_name];
+        mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
+    	estimate_statistical_significance(A, W, xlist, mcmc_qfunc, mcmc_qfunc_ind, size_functions[sfunc_name], community_detection[alg_name], num_of_runs, num_of_rand_nets, p_values, nhat, qhat);
+       	cout <<"   end"<<endl<<endl;
+    }
+   
+	
 
     /* Save results */
-    cout << "    Saving...";
-    writeLabels(outputfile, xlist);
-    cout <<"end"<<endl;
+    cout << "   Saving..."<<endl;
+    writeLabels(outputfile, xlist, p_values, corrected_alpha);
+    cout <<"   end"<<endl;
     cout << "===================" << endl;
 
     return 0;
@@ -193,7 +232,7 @@ void usage()
          << endl;
     cout << "	\e[1m-r=[R]\e[0m  Run the algorithm R times. (Default: 10)" << endl
          << endl
-         << "	\e[1m-a=[ALG]\e[0m Specify one of the following algorithms" << endl
+         << "	\e[1m-o=[ALG]\e[0m Specify one of the following optimisation algorithms" << endl
          << "	    - kl: Kernighan-Lin algorithm" << endl
          << "	    - mcmc: Markov chain monte carlo algorithm" << endl
          << endl\
@@ -206,6 +245,13 @@ void usage()
          << endl
          << "	\e[1m-k=[K]\e[0m  Set the number of communities to K. (Default: 2)" << endl
          << endl
+         << "	\e[1m-a=[ALPHA]\e[0m  Set significance level ALPHA. (Default: 1, i.e., statistical test is disabled)" << endl
+         << endl
+         << "	\e[1m-l=[NUM]\e[0m  Set the number of randomised networks to NUM. (Default: 500)" << endl
+         << endl
+         << "	\e[1m-s=[S]\e[0m Specify one of the following size functions:" << endl
+         << "	    - nodes: number of nodes in a community" << endl
+         << "	    - edges: number of edges incident to a community" << endl
          << endl;
 }
 
@@ -277,7 +323,7 @@ void readEdgeTable(string filename, vector<vector<int>>& A, vector<vector<double
     }
 }
 
-void writeLabels(const string filename, const vector<vector<bool>>& xlist)
+void writeLabels(const string filename, const vector<vector<bool>>& xlist, const vector<double>p_values, double alpha)
 {
     int K = xlist.size();
     int N = xlist[0].size();
@@ -291,9 +337,13 @@ void writeLabels(const string filename, const vector<vector<bool>>& xlist)
     }
     }
     FILE* fid = fopen(filename.c_str(), "w");
-    fprintf(fid, "id%cc\n", delimiter);
+    fprintf(fid, "id%cc%cs%cpval", delimiter, delimiter, delimiter);
     for (int i = 0; i < N; i++) {
-        fprintf(fid, "%d%c%d\n", i + 1, delimiter, C[i] + 1);
+        if(p_values[C[i]] < alpha){
+        	fprintf(fid, "\n%d%c%d%c%d%c%f", i + 1, delimiter, C[i] + 1, delimiter, 1, delimiter, p_values[C[i]]);
+	}else{
+        	fprintf(fid, "\n%d%c%d%c%d%c%f", i + 1, delimiter, C[i] + 1, delimiter, 0, delimiter, p_values[C[i]]);
+	}
     }
     fclose(fid);
 }

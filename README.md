@@ -2,7 +2,7 @@
 C++ and MATLAB codes for community-detetion algorithms in networks.
 
 I implemented the following optimisation algorithms for community detection:
- * Kernighan-Lin algorithm ["1"](https://en.wikipedia.org/wiki/Kernighan%E2%80%93Lin_algorithm)["2"](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107) 
+ * Kernighan-Lin algorithm [\[1\]](https://en.wikipedia.org/wiki/Kernighan%E2%80%93Lin_algorithm)["2"](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107) 
  * Markov chain monte carlo algorithm ["3"](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo) 
  * Louvain algorithm ["4"](http://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta)
 

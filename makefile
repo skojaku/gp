@@ -3,7 +3,8 @@
 
 MEXFLAGS := -fopenmp
 MEXOFLAGS := -O3
-MEXCOMPILER := /usr/bin/gcc-4.9
+MEXCOMPILER := gcc
+#MEXCOMPILER := /usr/bin/gcc-4.9
 CC := g++
 
 CFLAGS := -O3 -std=c++11 -fopenmp

@@ -48,10 +48,10 @@ param = g.init(); % initialise
  * `adjmat` - Adjacency matrix
  * `param` - Configurations of community detection and statistical test. 
    * `param.qfunc` - Quality function for communities. Default qfunc= 'dcsbm'. The following quality functions are available:
-     * qmod - Contribution of a community to the modularity 
-     * qint - Internal average degree 
-     * qexp - Expansion　
-     * qcnd - Conductance
+     * mod - Contribution of a community to the modularity 
+     * int - Internal average degree 
+     * rcut - Expansion　
+     * ncut - Conductance
      * dcsbm - Degree-corrected stochastic block model
    * `param.algorithm` - Optimisation algorithm. Default algorithm = 'kl'. The following algorithms are available: 
      * kl - Kernighan-Lin algorithm 
@@ -113,10 +113,10 @@ cids = g.detect(A, param);
      * 'mcmc': Markov chain monte carlo algorithm
      * 'louvain': Louvain algorithm 
    * -q: Quality function. (Default: 'dcsbm') 
-	    - 'qint': average degree of each community
-	    - 'qext': ratio cut
-	    - 'qcnd': normalised cut
-	    - 'qmod': modularity
+            - 'int': Internal average degree 
+            - 'rcut': Expansion　
+            - 'ncut': Conductance
+	    - 'mod': Modularity
 	    - 'dcsbm': dcSBM
    * -a=[ALPHA] Set significance level ALPHA. (Default: 0.05. Set 1 to disable the statistical test)
    * -l=[NUM] Set the number of randomised networks to NUM. (Default: 500)

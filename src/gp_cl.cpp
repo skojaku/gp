@@ -238,10 +238,10 @@ void usage()
          << "	    - louvain: Louvain algorithm" << endl
          << endl\
          << "	\e[1m-q=[Q]\e[0m Specify one of the following quality functions:" << endl
-         << "	    - qint: average degree of each community" << endl
-         << "	    - qext: ratio cut" << endl
-         << "	    - qcnd: normalised cut" << endl
-         << "	    - qmod: modularity" << endl
+         << "	    - int: average degree of each community" << endl
+         << "	    - rcut: ratio cut" << endl
+         << "	    - ncut: normalised cut" << endl
+         << "	    - mod: modularity" << endl
          << "	    - dcsbm: dcSBM" << endl
          << endl
          << "	\e[1m-k=[K]\e[0m  Set the number of communities to K. (Default: 2)" << endl

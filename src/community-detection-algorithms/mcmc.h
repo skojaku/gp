@@ -19,7 +19,8 @@ void run_mcmc(
 	const vector<vector<double>>& W, 
 	vector<vector<bool>>& xlist, 
         double (*calc_q)(const vector<vector<int>>&, const vector<vector<double>>&, const vector<vector<bool>>&x),
-        double (*calc_q_del)(const vector<vector<int> >& A, const vector<vector<double> >&W, const vector<vector<bool>>& xlist, const vector<double>& Nk, const vector<vector<double>>& Wrs, const vector<double>& Dk, const vector<vector<double>>& toU, const vector<double>& SelfLoop, const double M, const int nid, const int cid, const int newcid)
+        double (*calc_q_del)(const vector<vector<int> >& A, const vector<vector<double> >&W, const vector<vector<bool>>& xlist, const vector<double>& Nk, const vector<vector<double>>& Wrs, const vector<double>& Dk, const vector<vector<double>>& toU, const vector<double>& SelfLoop, const double M, const int nid, const int cid, const int newcid),
+	mt19937_64& mtrnd
 	){
 	
 	// initialise variables
@@ -65,7 +66,7 @@ void run_mcmc(
 	double Qmin = Q;
 	
 	// mcmc
-	while( itnum <=maxItNum & (itnum - lastupdate)<=maxStableLoopNum){
+	while( (itnum <=maxItNum) & ((itnum - lastupdate)<=maxStableLoopNum) ){
 	
 		shuffle(ord.begin(), ord.end(), mtrnd);
 		

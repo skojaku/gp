@@ -1,0 +1,187 @@
+sada@sada-bristol:~/program/lab/gp$ make gp
+g++ -O -std=c++11 -fopenmp -Wall -g -o gp src/gp_cl.cpp 
+In file included from src/gp.h:12:0,
+                 from src/gp_cl.cpp:20:
+src/quality_functions.h: In function ‘double calc_qint(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int)’:
+src/quality_functions.h:21:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j = 0;j < A[i].size();j++) {
+                  ^
+src/quality_functions.h:26:9: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+    if(Nu==1 | Nu ==N) return 0; 
+         ^
+src/quality_functions.h: In function ‘double calc_qint_diff(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int)’:
+src/quality_functions.h:53:16: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+    if(Nk[cid]-1<1e-30 | Nk[newcid]+1 >= A.size()-1e-30) return -numeric_limits<double>::max(); 
+                ^
+src/quality_functions.h: In function ‘double calc_qint_all(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&)’:
+src/quality_functions.h:59:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int cid = 0; cid < xlist.size(); cid++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qext(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int)’:
+src/quality_functions.h:81:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j = 0;j < A[i].size();j++) {
+                  ^
+src/quality_functions.h:82:41: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+   if(xlist[cid][i] & xlist[cid][A[i][j]]==false) retval+=W[i][j];
+                                         ^
+src/quality_functions.h: In function ‘double calc_qext_diff(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int)’:
+src/quality_functions.h:116:16: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+    if(Nk[cid]-1<1e-30 | Nk[newcid]+1 >= A.size()-1e-30) return -numeric_limits<double>::max(); 
+                ^
+src/quality_functions.h: In function ‘double calc_qext_all(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&)’:
+src/quality_functions.h:122:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int cid = 0; cid < xlist.size(); cid++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qcnd(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int)’:
+src/quality_functions.h:143:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j = 0;j < A[i].size();j++) {
+                  ^
+src/quality_functions.h:144:41: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+   if(xlist[cid][i] & xlist[cid][A[i][j]]==false) retval+=W[i][j];
+                                         ^
+src/quality_functions.h: In function ‘double calc_qcnd_diff(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int)’:
+src/quality_functions.h:183:19: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+     if(Dk[cid]-deg<1e-30 | Dk[newcid]+deg >= 2*M-1e-30) return -numeric_limits<double>::max(); 
+                   ^
+src/quality_functions.h: In function ‘double calc_qcnd_all(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&)’:
+src/quality_functions.h:189:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int cid = 0; cid < xlist.size(); cid++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qmod(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int)’:
+src/quality_functions.h:213:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for(int j =0;j<A[i].size();j++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qmod_diff(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int)’:
+src/quality_functions.h:240:12: warning: unused variable ‘selfw’ [-Wunused-variable]
+     double selfw = SelfLoop[nid];
+            ^
+In file included from src/gp.h:12:0,
+                 from src/gp_cl.cpp:20:
+src/quality_functions.h: In function ‘double calc_qmod_all(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&)’:
+src/quality_functions.h:252:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int cid = 0; cid < xlist.size(); cid++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qdcsbm_diff(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int)’:
+src/quality_functions.h:300:6: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+  if(t==s | t==r) continue;
+      ^
+src/quality_functions.h: In function ‘double calc_qdcsbm_all(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&)’:
+src/quality_functions.h:329:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+      for(int j = 0; j < A[i].size(); j++){
+                       ^
+src/quality_functions.h: In function ‘double calc_qdcsbm(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int)’:
+src/quality_functions.h:371:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+      for(int j = 0; j < A[i].size(); j++){
+                       ^
+src/quality_functions.h:382:6: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+  if(r==cid | s==cid){
+      ^
+src/quality_functions.h: In function ‘void init_com_param(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, std::vector<int>&, std::vector<double>&, std::vector<std::vector<double> >&, std::vector<double>&, std::vector<std::vector<double> >&, std::vector<double>&, double&)’:
+src/quality_functions.h:415:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int j = 0; j < A[i].size() ; j++){
+                    ^
+In file included from src/gp.h:12:0,
+                 from src/gp_cl.cpp:20:
+src/quality_functions.h: In function ‘void update_com_param(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<std::vector<bool> >&, std::vector<int>&, std::vector<double>&, std::vector<std::vector<double> >&, std::vector<double>&, std::vector<std::vector<double> >&, const double&, int, int)’:
+src/quality_functions.h:461:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j = 0; j < A[nid].size() ;j++) {
+                   ^
+src/quality_functions.h:458:9: warning: unused variable ‘win_old’ [-Wunused-variable]
+  double win_old = 0;
+         ^
+src/quality_functions.h:459:9: warning: unused variable ‘win_new’ [-Wunused-variable]
+  double win_new = 0;
+         ^
+In file included from src/community-detection-algorithms/comalgorithms.h:6:0,
+                 from src/gp.h:13,
+                 from src/gp_cl.cpp:20:
+src/community-detection-algorithms/mcmc.h: In function ‘void run_mcmc(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<std::vector<bool> >&, double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&), double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int), std::mt19937_64&)’:
+src/community-detection-algorithms/mcmc.h:69:15: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+  while( itnum <=maxItNum & (itnum - lastupdate)<=maxStableLoopNum){
+               ^
+In file included from src/community-detection-algorithms/comalgorithms.h:7:0,
+                 from src/gp.h:13,
+                 from src/gp_cl.cpp:20:
+src/community-detection-algorithms/kernighan_lin.h: In function ‘void run_kl(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<std::vector<bool> >&, double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&), double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, const std::vector<std::vector<double> >&, const std::vector<double>&, double, int, int, int), std::mt19937_64&)’:
+src/community-detection-algorithms/kernighan_lin.h:106:14: warning: suggest parentheses around comparison in operand of ‘|’ [-Wparentheses]
+    if(newcid < 0 | nid <0) break;
+              ^
+src/community-detection-algorithms/kernighan_lin.h:139:31: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+     if(qgain[i][candidate[i]] < qgain[i][cid] & qgain[i][cid] <= qgain[i][newcid]){
+                               ^
+src/community-detection-algorithms/kernighan_lin.h:141:37: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+     }else if(qgain[i][candidate[i]] < qgain[i][newcid] & qgain[i][newcid] <= qgain[i][cid]){
+                                     ^
+src/community-detection-algorithms/kernighan_lin.h:83:11: warning: unused variable ‘qmax’ [-Wunused-variable]
+    double qmax = -1 * std::numeric_limits<double>::max();
+           ^
+src/community-detection-algorithms/kernighan_lin.h:55:9: warning: unused variable ‘Qmin’ [-Wunused-variable]
+  double Qmin = Q;
+         ^
+In file included from src/community-detection-algorithms/comalgorithms.h:8:0,
+                 from src/gp.h:13,
+                 from src/gp_cl.cpp:20:
+src/community-detection-algorithms/louvain.h: In function ‘double calc_Qmod(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<int>&, double)’:
+src/community-detection-algorithms/louvain.h:42:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j =0;j<A[i].size();j++){
+                ^
+src/community-detection-algorithms/louvain.h: In function ‘void coarsing(std::vector<std::vector<int> >&, std::vector<std::vector<double> >&, std::vector<int>&)’:
+src/community-detection-algorithms/louvain.h:67:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i = 0;i<C.size();i++){
+                 ^
+src/community-detection-algorithms/louvain.h:80:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i = 0;i<A.size();i++){
+                 ^
+src/community-detection-algorithms/louvain.h:81:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int j = 0;j<A[i].size();j++){
+                 ^
+src/community-detection-algorithms/louvain.h:87:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for( int k = 0;k<newA[rid].size();k++){ 
+                   ^
+src/community-detection-algorithms/louvain.h: In function ‘void modularity_label_switching(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<int>&, double, std::mt19937_64&)’:
+src/community-detection-algorithms/louvain.h:187:20: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+  }while( isupdated == true & itNum<=100);
+                    ^
+src/community-detection-algorithms/louvain.h:192:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int j=0;j<labs.size();j++){
+                ^
+src/community-detection-algorithms/louvain.h: In function ‘void louvain_core(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<int>&, double, std::mt19937_64&)’:
+src/community-detection-algorithms/louvain.h:232:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int i = 0;i<Ct.size();i++){
+                  ^
+src/community-detection-algorithms/louvain.h:240:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  }while( newA.size()!= prevGraphSize);
+                     ^
+src/community-detection-algorithms/louvain.h: In function ‘void louvain(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, int, std::vector<std::vector<bool> >&, std::mt19937_64&)’:
+src/community-detection-algorithms/louvain.h:255:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for(int k = 0;k < xlist.size();k++){
+                     ^
+In file included from src/gp.h:14:0,
+                 from src/gp_cl.cpp:20:
+src/qstest/qstest.cpp: In function ‘void estimate_statistical_significance(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&), double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<std::vector<bool> >&, int), double (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<bool>&), void (*)(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, std::vector<std::vector<bool> >&, std::mt19937_64&), int, int, std::vector<double>&, std::vector<int>&, std::vector<double>&, std::vector<int>&)’:
+src/qstest/qstest.cpp:197:14: warning: unused variable ‘K_rand’ [-Wunused-variable]
+          int K_rand = x_rand.size();
+              ^
+src/qstest/qstest.cpp:207:27: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for (int k = 0; k < x_rand.size(); k++) {
+                           ^
+src/qstest/qstest.cpp:173:13: warning: unused variable ‘K_rand’ [-Wunused-variable]
+         int K_rand = x_rand.size();
+             ^
+src/qstest/qstest.cpp:118:12: warning: unused variable ‘Q’ [-Wunused-variable]
+     double Q;
+            ^
+src/qstest/qstest.cpp:123:10: warning: variable ‘unweighted’ set but not used [-Wunused-but-set-variable]
+     bool unweighted = true;
+          ^
+src/qstest/qstest.cpp: In function ‘double calc_n(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<bool>&)’:
+src/qstest/qstest.cpp:254:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for(int i = 0;i<x.size();i++) cnt+=!!(x[i]);
+                    ^
+src/qstest/qstest.cpp: In function ‘double calc_e(const std::vector<std::vector<int> >&, const std::vector<std::vector<double> >&, const std::vector<bool>&)’:
+src/qstest/qstest.cpp:265:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for(int i = 0;i<x.size();i++){
+                    ^
+src/gp_cl.cpp: In function ‘void readEdgeTable(std::__cxx11::string, std::vector<std::vector<int> >&, std::vector<std::vector<double> >&, int&)’:
+src/gp_cl.cpp:314:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+

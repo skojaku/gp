@@ -22,7 +22,8 @@ void run_kl(
 	const vector<vector<double>>& W, 
 	vector<vector<bool>>& xlist, 
         double (*calc_q)(const vector<vector<int>>&, const vector<vector<double>>&, const vector<vector<bool>>&x),
-        double (*calc_q_del)(const vector<vector<int> >& A, const vector<vector<double> >&W, const vector<vector<bool>>& xlist, const vector<double>& Nk, const vector<vector<double>>& Wrs, const vector<double>& Dk, const vector<vector<double>>& toU, const vector<double>& SelfLoop, const double M, const int nid, const int cid, const int newcid)
+        double (*calc_q_del)(const vector<vector<int> >& A, const vector<vector<double> >&W, const vector<vector<bool>>& xlist, const vector<double>& Nk, const vector<vector<double>>& Wrs, const vector<double>& Dk, const vector<vector<double>>& toU, const vector<double>& SelfLoop, const double M, const int nid, const int cid, const int newcid),
+        mt19937_64& mtrnd
 	){
 
 	/* Initialise variables */	
@@ -51,7 +52,6 @@ void run_kl(
 	// best quality
 	double Q = calc_q(A, W, xlist);
 	double Qmax = Q;
-	double Qmin = Q;
 	
 	/* Main routine */
 	vector<vector<bool>>xbest = xlist; 
@@ -79,8 +79,6 @@ void run_kl(
 	
 		// move a node in turn		
 		for( int it2 = 0; it2 < N; it2++){
-			double qmax = -1 * std::numeric_limits<double>::max();
-				
 			// Find a move of a node that yields the maximum increment	
 			double dQmax = -1 * numeric_limits<double>::max();
 			int nid = -1;
@@ -102,7 +100,7 @@ void run_kl(
 			}
 		
 		
-			if(newcid < 0 | nid <0) break;
+			if((newcid < 0) | (nid <0) ) break;
 			int cid = C[nid];
 			update_com_param( A,  W, xlist, C, Nk, Wrs, Dk, toU, M, nid, newcid);
 			
@@ -135,9 +133,9 @@ void run_kl(
 					qgain[i][newcid] = -1 * numeric_limits<double>::max();
 				}
 				
-				if(qgain[i][candidate[i]] < qgain[i][cid] & qgain[i][cid] <= qgain[i][newcid]){
+				if( (qgain[i][candidate[i]] < qgain[i][cid]) & (qgain[i][cid] <= qgain[i][newcid]) ){
 					candidate[i] = newcid;
-				}else if(qgain[i][candidate[i]] < qgain[i][newcid] & qgain[i][newcid] <= qgain[i][cid]){
+				}else if( (qgain[i][candidate[i]] < qgain[i][newcid]) & (qgain[i][newcid] <= qgain[i][cid]) ){
 					candidate[i] = cid;
 				}
 			}

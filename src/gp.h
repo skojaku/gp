@@ -5,9 +5,13 @@
 #include <vector>
 #include <numeric>
 #include <cmath>
-#ifdef _OEPNMP
 #include <omp.h>
-#endif
+
+using namespace std;
+
+#include "quality_functions.h"
+#include "community-detection-algorithms/comalgorithms.h"
+#include "qstest/qstest.cpp"
 
 #if !defined(MAX)
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -16,9 +20,4 @@
 #if !defined(MIN)
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #endif
-using namespace std;
 
-/* Global variables */
-std::mt19937_64 mtrnd;
-
-void init_random_number_generator();

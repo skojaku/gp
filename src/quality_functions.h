@@ -18,12 +18,12 @@ double calc_qint(
     for(int i = 0;i < N;i++) {
 	if(xlist[cid][i]==false) continue;
 
-	for(int j = 0;j < A[i].size();j++) {
+	for(unsigned int j = 0;j < A[i].size();j++) {
 		if(xlist[cid][i] & xlist[cid][A[i][j]]) retval+=W[i][j];
         }
 	Nu+=!!(xlist[cid][i]);
     }
-   if(Nu==1 | Nu ==N) return 0; 
+   if( (Nu==1) | (Nu ==N) ) return 0; 
    return retval / (double) Nu;
 }
 
@@ -50,13 +50,14 @@ double calc_qint_diff(
    double dQ = (Wrs[cid][cid] - 2.0 * toC_old - selfw) / (Nk[cid] - 1.0) - Wrs[cid][cid] / Nk[cid] 
 		+ (Wrs[newcid][newcid] + 2.0 * toC_new + selfw) / (Nk[newcid] + 1.0) - Wrs[newcid][newcid] / Nk[newcid];
     
-   if(Nk[cid]-1<1e-30 | Nk[newcid]+1 >= A.size()-1e-30) return -numeric_limits<double>::max(); 
+   if( (Nk[cid]-1<1e-30) | (Nk[newcid]+1 >= A.size()-1e-30) ) return -numeric_limits<double>::max(); 
    return dQ;
 }
 
 double calc_qint_all(const vector<vector<int>>&A, const vector<vector<double>>&W, const vector<vector<bool>>&xlist){
 	double retval = 0;
-	for(int cid = 0; cid < xlist.size(); cid++){
+        int K = xlist.size();
+	for(int cid = 0; cid < K; cid++){
 		retval+=calc_qint(A, W, xlist, cid);	
 	}
 	return retval;
@@ -77,9 +78,9 @@ double calc_qext(
     double retval = 0;
     for(int i = 0;i < N;i++) {
 	if(xlist[cid][i]==false) continue;
-        
-	for(int j = 0;j < A[i].size();j++) {
-		if(xlist[cid][i] & xlist[cid][A[i][j]]==false) retval+=W[i][j];
+        int di = A[i].size(); 
+	for(int j = 0;j < di;j++) {
+		if( xlist[cid][i] & (xlist[cid][A[i][j]]==false) ) retval+=W[i][j];
         }
 	Nu+=1;
     }
@@ -113,13 +114,14 @@ double calc_qext_diff(
 		+ (Oknewcid - toC_new + (deg - toC_new - selfw )) / (Nk[newcid] + 1.0) - Oknewcid / Nk[newcid];
    
     dQ = dQ * (-1); 
-   if(Nk[cid]-1<1e-30 | Nk[newcid]+1 >= A.size()-1e-30) return -numeric_limits<double>::max(); 
+   if( (Nk[cid]-1<1e-30) | (Nk[newcid]+1 >= A.size()-1e-30) ) return -numeric_limits<double>::max(); 
     return  dQ;
 }
 
 double calc_qext_all(const vector<vector<int>>&A, const vector<vector<double>>&W, const vector<vector<bool>>&xlist){
 	double retval = 0;
-	for(int cid = 0; cid < xlist.size(); cid++){
+        int K = xlist.size();
+	for(int cid = 0; cid < K; cid++){
 		retval+=calc_qext(A, W, xlist, cid);	
 	}
 	return retval;
@@ -139,9 +141,10 @@ double calc_qcnd(
     for(int i = 0;i < N;i++) {
 	if(xlist[cid][i]==false) continue;
        
-	double deg = 0; 
-	for(int j = 0;j < A[i].size();j++) {
-		if(xlist[cid][i] & xlist[cid][A[i][j]]==false) retval+=W[i][j];
+	double deg = 0;
+        int di = A[i].size(); 
+	for(int j = 0;j < di;j++) {
+		if(xlist[cid][i] & (xlist[cid][A[i][j]]==false) ) retval+=W[i][j];
 		deg+=W[i][j];
         }
 	Du+= deg;
@@ -180,13 +183,14 @@ double calc_qcnd_diff(
 
 
     dQ = dQ * (-1); 
-    if(Dk[cid]-deg<1e-30 | Dk[newcid]+deg >= 2*M-1e-30) return -numeric_limits<double>::max(); 
+    if( (Dk[cid]-deg<1e-30) | (Dk[newcid]+deg >= 2*M-1e-30) ) return -numeric_limits<double>::max(); 
     return dQ;
 }
 
 double calc_qcnd_all(const vector<vector<int>>&A, const vector<vector<double>>&W, const vector<vector<bool>>&xlist){
 	double retval = 0;
-	for(int cid = 0; cid < xlist.size(); cid++){
+        int K = xlist.size();
+	for(int cid = 0; cid < K; cid++){
 		retval+=calc_qcnd(A, W, xlist, cid);	
 	}
 	return retval;
@@ -210,7 +214,8 @@ double calc_qmod(
 	if(xlist[cid][i]==false) continue;
 
 	D+=!!(xlist[cid][i]) * deg;
-        for(int j =0;j<A[i].size();j++){
+        int di = A[i].size();
+        for(int j =0;j<di;j++){
 		if(xlist[cid][i] & xlist[cid][A[i][j]]) retval+=W[i][j];
 	}
     }
@@ -237,7 +242,6 @@ double calc_qmod_diff(
     
     double toC_old = toU[nid][cid];
     double toC_new = toU[nid][newcid];
-    double selfw = SelfLoop[nid];
     double deg = accumulate(W[nid].begin(), W[nid].end(), 0.0);
    
    double dQ = (Wrs[cid][cid] - 2* toC_old - pow(Dk[cid] - deg, 2)/(double)(2*M) ) - (Wrs[cid][cid] - pow(Dk[cid], 2)/(double)(2*M) ); 
@@ -249,7 +253,8 @@ double calc_qmod_diff(
 
 double calc_qmod_all(const vector<vector<int>>&A, const vector<vector<double>>&W, const vector<vector<bool>>&xlist){
 	double retval = 0;
-	for(int cid = 0; cid < xlist.size(); cid++){
+        int K = xlist.size();
+	for(int cid = 0; cid < K; cid++){
 		retval+=calc_qmod(A, W, xlist, cid);	
 	}
 	return retval;
@@ -297,7 +302,7 @@ double calc_qdcsbm_diff(
    double retval = 0;
    double ki = accumulate(W[nid].begin(), W[nid].end(), 0.0);
    for(int t = 0; t < K; t++){
-	if(t==s | t==r) continue;
+	if( (t==s) | (t==r) ) continue;
 	retval += _a(Wrs[r][t] - toU[nid][t]) - _a(Wrs[r][t]) + _a(Wrs[s][t] + toU[nid][t]) - _a(Wrs[s][t]);	
    }
    retval+= _a(Wrs[r][s] + toU[nid][r] - toU[nid][s]) - _a(Wrs[r][s]) + _b(Wrs[r][r] - 2 *(toU[nid][r] + SelfLoop[nid])) - _b(Wrs[r][r])
@@ -314,8 +319,8 @@ double calc_qdcsbm_all(
     int N = A.size();
 	
     vector<int> C(N, 0.0);
-    for(int i = 0; i < N; i++){
-    	for(int k = 0; k < K; k++){
+    for(int  i = 0; i < N; i++){
+    	for(int  k = 0; k < K; k++){
 		if(xlist[k][i]){
 			C[i] = k;
 			break;
@@ -325,8 +330,9 @@ double calc_qdcsbm_all(
     vector<vector<double>> Wrs(K, vector<double>(K, 0.0));
     vector<double> Dk(K, 0.0);
     double M = 0.0;
-    for(int i = 0; i < N; i++){
-    	for(int j = 0; j < A[i].size(); j++){
+    for(int  i = 0; i < N; i++){
+        int  di = A[i].size();
+    	for(int  j = 0; j < di; j++){
 		Wrs[C[i]][C[j]] +=W[i][j];
 		Dk[ C[i] ]+=W[i][j];
 		M+=W[i][j];
@@ -335,8 +341,8 @@ double calc_qdcsbm_all(
     M = M / 2;
     
     double retval = 0;
-    for(int r = 0; r < K; r++){
-    for(int s = r; s < K; s++){
+    for(int  r = 0; r < K; r++){
+    for(int  s = r; s < K; s++){
 	if(r==s){
 		retval+= klent(Wrs[r][s]/(2.0*M), Dk[r] * Dk[s] /(4.0*M*M) );
 	}else{
@@ -356,8 +362,8 @@ double calc_qdcsbm(
     int N = A.size();
 	
     vector<int> C(N, 0.0);
-    for(int i = 0; i < N; i++){
-    	for(int k = 0; k < K; k++){
+    for(int  i = 0; i < N; i++){
+    	for(int  k = 0; k < K; k++){
 		if(xlist[k][i]){
 			C[i] = k;
 			break;
@@ -367,8 +373,9 @@ double calc_qdcsbm(
     vector<vector<double>> Wrs(K, vector<double>(K, 0.0));
     vector<double> Dk(K, 0.0);
     double M = 0.0;
-    for(int i = 0; i < N; i++){
-    	for(int j = 0; j < A[i].size(); j++){
+    for(int  i = 0; i < N; i++){
+        int di = A[i].size();
+    	for(int  j = 0; j < di; j++){
 		Wrs[C[i]][C[j]] +=W[i][j];
 		Dk[ C[i] ]+=W[i][j];
 		M+=W[i][j];
@@ -377,9 +384,9 @@ double calc_qdcsbm(
     M = M / 2;
     
     double retval = 0;
-    for(int r = 0; r < K; r++){
-    for(int s = r; s < K; s++){
-	if(r==cid | s==cid){
+    for(int  r = 0; r < K; r++){
+    for(int  s = r; s < K; s++){
+	if( (r==cid) | (s==cid) ){
 	if(r==s){
 		retval+= klent(Wrs[r][s]/(2.0*M), Dk[r] * Dk[s] /(4.0*M*M) );
 	}else{
@@ -404,15 +411,16 @@ void init_com_param(const vector<vector<int> >& A, const vector<vector<double> >
 	fill(SelfLoop.begin(), SelfLoop.end(),0.0);
 	fill(C.begin(), C.end(),0);
 	M = 0;
-	for(int i = 0; i < N; i++){
-		for(int k = 0; k < K; k++){
+	for(int  i = 0; i < N; i++){
+		for(int  k = 0; k < K; k++){
 			if(xlist[k][i]) C[i] = k;
 		}
 		Nk[C[i]]++;	
 	}
-	for(int i = 0; i < N; i++){
+	for(int  i = 0; i < N; i++){
 		double selfw = 0; 
-		for(int j = 0; j < A[i].size() ; j++){
+        	int  di = A[i].size();
+    		for(int  j = 0; j < di; j++){
 			int nei = A[i][j];
 			int r = C[i];
 			int s = C[nei];
@@ -427,18 +435,18 @@ void init_com_param(const vector<vector<int> >& A, const vector<vector<double> >
 		SelfLoop[i] = selfw;
 	}
 	
-	for(int k = 0; k < K; k++){
-		for(int l = 0; l < K; l++){
+	for(int  k = 0; k < K; k++){
+		for(int  l = 0; l < K; l++){
 			Dk[k]+= Wrs[k][l];
 		}
 		M+=Dk[k];
 	}
 	M = M  / 2.0;	
 	
-	for(int i = 0; i < N; i++){
+	for(int  i = 0; i < N; i++){
 		fill(toU[i].begin(), toU[i].end(),0.0);
-		int deg = A[i].size();	
-		for(int j = 0; j < deg; j++){
+		int  deg = A[i].size();	
+		for(int  j = 0; j < deg; j++){
 			toU[i][ C[ A[i][j] ] ]+=W[i][j];
 		}
 	}
@@ -455,10 +463,9 @@ void update_com_param(const vector<vector<int> >& A, const vector<vector<double>
 	Nk[oldcid]--;
 	Nk[newcid]++;
 	
-	double win_old = 0;
-	double win_new = 0;
 	double selfw = 0;
-	for(int j = 0; j < A[nid].size() ;j++) {
+	int  di = A[nid].size();
+	for(int  j = 0; j < di ;j++) {
 	    int nei = A[nid][j];
 	    if(nid==nei){
 		selfw+=W[nid][j];
@@ -488,7 +495,7 @@ double calc_sum_q(
 ){
 	int K = xlist.size();
 	double Q = 0;
-	for(int k = 0; k < K; k++){
+	for(int  k = 0; k < K; k++){
 		Q+=calc_q(A, W, xlist, k);	
 	}
 	return Q;	

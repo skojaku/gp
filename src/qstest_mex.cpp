@@ -2,13 +2,9 @@
 #include <map>
 #include <cmath>
 #include <cfloat>
-
 #include "gp.h"
-#include "quality_functions.h"
-#include "community-detection-algorithms/comalgorithms.h"
-#include "qstest/qstest.cpp"
 
-void init_random_number_generator(){
+mt19937_64 init_random_number_generator(){
     	int seeds[624];
        	size_t size = 624*4; //Declare size of data
        	ifstream urandom("/dev/urandom", ios::in | ios::binary); //Open stream
@@ -22,7 +18,13 @@ void init_random_number_generator(){
             		cerr << "Failed to open /dev/urandom" << endl;
        	}
     	seed_seq seed(&seeds[0], &seeds[624]);
+        
+        //random_device rd;
+        //mt19937_64 gen(rd());
+	
+	mt19937_64 mtrnd;
     	mtrnd.seed(seed);
+	return mtrnd;
 }
 
 
@@ -74,13 +76,14 @@ void mexFunction(int nlhs, mxArray* plhs[],
 
     vector<double> p_values;
     vector<int> nhat;
+    vector<int> rgindex;
     vector<double> qhat;
-    init_random_number_generator();
+    //init_random_number_generator();
 	
     mcmc_qfunc = quality_functions[qfunc_name];
     mcmc_qfunc_ind = quality_functions_ind[qfunc_name];
     mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
-    estimate_statistical_significance(A, W, xlist, mcmc_qfunc, mcmc_qfunc_ind, size_functions[sfunc_name], community_detection[alg_name], num_of_runs, num_of_rand_nets, p_values, nhat, qhat);
+    estimate_statistical_significance(A, W, xlist, mcmc_qfunc, mcmc_qfunc_ind, size_functions[sfunc_name], community_detection[alg_name], num_of_runs, num_of_rand_nets, p_values, nhat, qhat, rgindex);
 
     int R = nhat.size();
 
@@ -89,16 +92,19 @@ void mexFunction(int nlhs, mxArray* plhs[],
     plhs[2] = mxCreateDoubleMatrix((mwSize)K, (mwSize)1, mxREAL);
     plhs[3] = mxCreateDoubleMatrix((mwSize)R, (mwSize)1, mxREAL);
     plhs[4] = mxCreateDoubleMatrix((mwSize)R, (mwSize)1, mxREAL);
+    plhs[5] = mxCreateDoubleMatrix((mwSize)R, (mwSize)1, mxREAL);
 
     double* retPvals = mxGetPr(plhs[0]);
     double* retn = mxGetPr(plhs[1]);
     double* retq = mxGetPr(plhs[2]);
     double* retnhat = mxGetPr(plhs[3]);
     double* retqhat = mxGetPr(plhs[4]);
+    double* retrgindex = mxGetPr(plhs[5]);
 
     for (int i = 0; i < R; i++) {
         retnhat[i] = nhat[i];
         retqhat[i] = qhat[i];
+        retrgindex[i] = rgindex[i];
     }
 
     for (int k = 0; k < K; k++) {

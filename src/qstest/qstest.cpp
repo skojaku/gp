@@ -1,3 +1,4 @@
+#include "qstest.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -5,9 +6,7 @@
 #include <vector>
 #include <numeric>
 #include <cmath>
-#ifdef _OEPNMP
 #include <omp.h>
-#endif
 
 #if !defined(MAX)
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -24,40 +23,77 @@ double normcdf(double value)
     return 0.5 + 0.5 * erf(value * M_SQRT1_2);
 }
 
-/* Private function */
+/*
+ * Chung, F. & Lu, L. 
+ * Connected Components in Random Graphs with Given Expected Degree Sequences. 
+ * Ann. Comb. 6, 125–145 (2002). 
+ *
+ * Miller, J. C. & Hagberg, A. 
+ * Efficient Generation of Networks with Given Expected Degrees. 
+ * in Algorithms and Models for the Web Graph (eds. Frieze, A., Horn, P. & Prałat, P.) 
+ * 6732 LNCS, 115–126 (Springer Berlin Heidelberg, 2011). 
+ *
+ * */
 void generate_randomised_net(
-    vector<double>& deg,
+    const vector<double>& deg,
+    const vector<int>& nodes, // id of node in descending order of degree
     vector<vector<int>>& A,
-    vector<vector<double>>& W)
+    vector<vector<double>>& W,
+    bool isunweighted,
+    mt19937_64 mtrnd // random number generator
+    )
 {
+    bool noSelfloop = true;
+    uniform_real_distribution<double> udist(0.0, 1.0);
     int N = deg.size();
     double M = accumulate(deg.begin(), deg.end(), 0.0);
     M /= 2;
-    A.clear();
-    W.clear();
-    for (int i = 0; i < N; i++) {
-        vector<int> tmp;
-        A.push_back(tmp);
-        vector<double> tmp2;
-        W.push_back(tmp2);
-    }
+	
+	
+    for(int u = 0; u < N-1; u++){
+	int v = u;
 
-    double rnd = 0;
-    for (int i = 0; i < N; i++) {
-        for (int j = i; j < N; j++) {
-            poisson_distribution<int> distribution(deg[i] * deg[j] / (2.0 * (double)M));
-            rnd = distribution(mtrnd);
-            if (rnd <1 ) continue;
-            A[i].push_back(j);
-            W[i].push_back((double)rnd);
-            
-            if(i == j) continue;
-                
-            A[j].push_back(i);
-            W[j].push_back((double)rnd);
-        }
+	if(noSelfloop){
+		v = v + 1;
+	}	
+	
+	double p = MIN(1, deg[ nodes[u] ] * deg[ nodes[v] ] / (2.0*M) );
+	while(v < N && p > 0){
+		if(p!=1){
+			double r = MIN( MAX(udist(mtrnd), 1e-30), 1-1e-30);
+			v = v + MAX(floor( log(r) / log(1-p) ), 0.0);
+		}
+		if(v < N ){
+			double q = MIN(deg[ nodes[u] ] * deg[ nodes[v] ] / (2.0*M), 1);
+			double w = 1;
+			bool addEdge = false;
+			if(isunweighted){
+				double r = udist(mtrnd);
+				addEdge = r < q / p;	
+			}else{
+	    			poisson_distribution<int> distribution(q / p);
+	    			w = distribution(mtrnd);
+				addEdge = w>0; 	
+			}
+			if(addEdge){
+				if(u!=v){
+	            			A[nodes[u]].push_back(nodes[v]);
+	            			A[nodes[v]].push_back(nodes[u]);
+	            			W[nodes[u]].push_back(w);
+	            			W[nodes[v]].push_back(w);
+				}else{
+	            			A[nodes[u]].push_back(nodes[u]);
+	            			W[nodes[u]].push_back(2*w);
+				}
+			}
+			p = q;
+			v = v + 1;
+		}
+	}
     }
 }
+
+
 
 /* ---- Estimating statistical significance of a community ----*/
 void estimate_statistical_significance(
@@ -67,21 +103,29 @@ void estimate_statistical_significance(
     double (*calc_q)(const vector<vector<int>>&, const vector<vector<double>>&, const vector<vector<bool>>&x),
     double (*calc_qind)(const vector<vector<int>>&, const vector<vector<double>>&, const  vector<vector<bool>>&, int k),
     double (*calc_s)(const vector<vector<int>>&, const vector<vector<double>>&, const vector<bool>&),
-    void (*find_communities)(const vector<vector<int> >&, const vector<vector<double>>&, vector<vector<bool>>&),
+    void (*find_communities)(const vector<vector<int> >&, const vector<vector<double>>&, vector<vector<bool>>&, mt19937_64& ),
     const int num_of_runs,
     const int num_of_rand_nets,
     vector<double>& p_values,
     vector<int>& nhat,
-    vector<double>& qhat){
+    vector<double>& qhat, 
+    vector<int>& rgindex // index of randomised networks. 
+	){
 
     /* Initialise variables */
     int K = xlist.size();
     int N = A.size();
-    double Q;
     nhat.clear();
     qhat.clear();
-    vector<double> deg(N);
-    for (int i = 0; i < N; i++) deg[i] = accumulate(W[i].begin(), W[i].end(), 0.0);
+    rgindex.clear();
+    vector<double> deg(N);	
+    bool isunweighted = true;
+    for (int i = 0; i < N; i++){
+	deg[i] = accumulate(W[i].begin(), W[i].end(), 0.0);
+	if((pow(deg[i]-W[i].size(),2))>1){
+		isunweighted = false;
+	}
+    }
     
     vector<double> q(K);
     vector<int> n(K);
@@ -89,22 +133,42 @@ void estimate_statistical_significance(
 	n[k] = calc_s(A, W, xlist[k]);
 	q[k] = calc_qind(A, W, xlist, k);
     };
+    
+    vector<int> nodes(N);
+    iota(nodes.begin(), nodes.end(), 0);
+    sort(
+        nodes.begin(),
+        nodes.end(),
+        [&](int x, int y){return deg[x] > deg[y];}
+    );
+   
+    // create random number generator per each thread
+    int numthread;
+    # pragma omp parallel
+    {
+    numthread = omp_get_num_threads();
+    }
+    vector<mt19937_64> mtrnd_list(numthread);
+    for(int i = 0; i < numthread; i++){
+		mtrnd_list[i] = init_random_number_generator();
+    }
 
     /* Generate \hat q^{(s)} and \hat n^{(s)} (1 \leq s \leq S) */
     #ifdef _OPENMP
-    #pragma omp parallel for shared(nhat, qhat, deg)
+    #pragma omp parallel for shared(nhat, qhat, deg, nodes, mtrnd_list)
     #endif
     for (int it = 0; it < num_of_rand_nets; it++) {
 
         // Generate a randomised network using the configuration model.
-        vector<vector<int>> A_rand;
-        vector<vector<double>> W_rand;
-        generate_randomised_net(deg, A_rand, W_rand);
-
+        vector<vector<int>> A_rand(N, vector<int>(0));
+        vector<vector<double>> W_rand(N, vector<double>(0));
+        
+       int tid = omp_get_thread_num();
+        mt19937_64 mtrnd = mtrnd_list[tid];
+       	generate_randomised_net(deg, nodes, A_rand, W_rand, isunweighted, mtrnd);
         // Detect core-periphery pairs using the KM algorithm
 	bool valid; 
 	vector<vector<bool>> x_rand;
-        int K_rand = x_rand.size();
         do{
 	
 		// repeat com detect num_of_runs times 
@@ -114,7 +178,7 @@ void estimate_statistical_significance(
 		for (int r = 0; r < num_of_runs; r++) {
 	            vector<vector<bool>> x_rand_tmp(K, vector<bool>(N, false) );
 		    
-	            find_communities(A_rand, W_rand, x_rand_tmp);
+	            find_communities(A_rand, W_rand, x_rand_tmp, mtrnd);
 
 		    double Qi = calc_q(A_rand, W_rand, x_rand_tmp);
 		    if(Qi != Qi) {continue;}
@@ -128,22 +192,21 @@ void estimate_statistical_significance(
 	        
 		// validate the detected community
 		valid = true;
-        	int K_rand = x_rand.size();
 	        double tmp = calc_q(A_rand, W_rand, x_rand );
 		if(tmp != tmp) {valid = false;}
 	}while(valid==false);
 
         // Save the quality and size of core-periphery pairs in the randomised network.
-
+        int K = x_rand.size();
         #ifdef _OPENMP
         #pragma omp critical
         #endif
-        for (int k = 0; k < x_rand.size(); k++) {
+        for(int k = 0; k < K; k++) {
             nhat.push_back( calc_s(A_rand, W_rand, x_rand[k]) );
             qhat.push_back( calc_qind(A_rand, W_rand, x_rand, k) );
+            rgindex.push_back( it );
         }
     }
-
     /* Compute mean and covariance */
     int S = nhat.size();
     double mu_n = (double)accumulate(nhat.begin(), nhat.end(), 0.0) / (double)S;
@@ -185,7 +248,8 @@ double calc_n(
     const vector<bool>& x){
 
     double cnt = 0;
-    for(int i = 0;i<x.size();i++) cnt+=!!(x[i]);
+    unsigned int N = x.size();
+    for(unsigned int i = 0;i<N;i++) cnt+=!!(x[i]);
     return cnt;
     //return count(x.begin(),x.end(),true); 
 }
@@ -196,7 +260,8 @@ double calc_e(
     const vector<bool>& x){
 
     double cnt = 0;
-    for(int i = 0;i<x.size();i++){
+    int N = x.size();
+    for(int i = 0;i< N ;i++){
 	if(x[i]) cnt+=accumulate(W[i].begin(), W[i].end(), 0.0);
     }
     return cnt;

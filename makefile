@@ -1,13 +1,14 @@
 # Makefile
 .PHONY: all
 
-MEXFLAGS := -fopenmp
-MEXOFLAGS := -O3
+#MEXFLAGS := -fopenmp
+#MEXOFLAGS := -O3
+MEXOFLAGS := -Wall -g -fopenmp
 MEXCOMPILER := gcc
 #MEXCOMPILER := /usr/bin/gcc-4.9
 CC := g++
 
-CFLAGS := -O3 -std=c++11 -fopenmp
+CFLAGS := -O -std=c++11 -fopenmp -Wall -g
 
 # for linux
 all: gp_mex.mexa64 gp qstest_mex.mexa64
@@ -24,4 +25,4 @@ qstest_mex.mexa64: ./src/qstest/* ./src/qstest_mex.cpp ./src/community-detection
 
 .PHONY: clean
 clean:
-	$(RM) *.mexa64 ./gp qstest_mex.mexa64  
+	$(RM) *.mexa64 ./gp  

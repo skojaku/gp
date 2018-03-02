@@ -20,7 +20,9 @@ void louvain(
     const vector<vector<int>>& A,
     const vector<vector<double>>& W,
     const int num_of_runs,
-    vector<vector<bool>>& xlist);
+    vector<vector<bool>>& xlist,
+    mt19937_64& mtrnd
+   );
 
 double calc_dQmod( double d, double degi, double D, double selfw, const double M ){
 	return 2*( d - degi*D/(2.0*M)) + (selfw-degi*degi/(2.0*M)); 
@@ -37,7 +39,8 @@ double calc_Qmod(
 	int N = C.size();
 	vector<double> degC(N);fill(degC.begin(),degC.end(),0);
 	for(int i =0;i<N;i++){
-	for(int j =0;j<A[i].size();j++){
+        int di = A[i].size();
+	for(int j =0;j<di;j++){
 		degC[ C[i] ]+=W[i][j];
 		if(C[i] == C[A[i][j]]) {
 			retval+=W[i][j];	
@@ -62,7 +65,8 @@ void coarsing(
 	){
 	
 	int K = 0; 
-	for(int i = 0;i<C.size();i++){
+        int N = C.size();
+	for(int i = 0;i<N;i++){
 		if( K<C[i] )K = C[i];
 	}
 	K = K +1;
@@ -75,14 +79,16 @@ void coarsing(
 		newW[i] = tmp2;
 	} 
 	
-	for(int i = 0;i<A.size();i++){
-	for(int j = 0;j<A[i].size();j++){
+	for(int i = 0;i<N;i++){
+        int di = A[i].size();
+	for(int j = 0;j<di;j++){
 		int rid = C[i];
 		int cid = C[A[i][j]];
 		double w = W[i][j];
 		
 		int l = -1;
-		for( int k = 0;k<newA[rid].size();k++){	
+		int dinew = newA[rid].size();
+		for( int k = 0;k<dinew;k++){	
 			if(newA[rid][k]==cid){
 				l = k;	
 				break;
@@ -96,7 +102,6 @@ void coarsing(
 		}
 	}
 	}
-	int N = A.size();
 	for(int i = 0;i<N;i++){
 		A[i].clear();
 		W[i].clear();
@@ -112,7 +117,8 @@ void modularity_label_switching(
 	const vector<vector<int>>& A, 
 	const vector<vector<double>>& W, 
 	vector<int>& C, 
-	const double M
+	const double M,
+        mt19937_64& mtrnd
 	){
 	
         int N=C.size();
@@ -167,7 +173,6 @@ void modularity_label_switching(
 					
 				newcid = cid;
 				dQ = dQc;	
-			
 			}
 			
 			if(dQ< 0) continue;
@@ -182,12 +187,14 @@ void modularity_label_switching(
 			isupdated = true;
 		}
 		itNum++;
-	}while( isupdated == true );
+	}while( (isupdated == true) & (itNum<=100) );
+
 	// remove redundant cp
 	std::vector<int> labs;
 	for(int i=0;i<N;i++){
 		int cid = -1;
-		for(int j=0;j<labs.size();j++){
+ 		int labsize = labs.size();
+		for(int j=0;j<labsize;j++){
 			if(labs[j]==C[i]){
 				cid = j;
 				break;
@@ -206,7 +213,8 @@ void louvain_core(
 	const vector<vector<int>>& A, 
 	const vector<vector<double>>& W, 
 	vector<int>& C, 
-	const double M
+	const double M,
+        mt19937_64& mtrnd
 	){
 	
 	
@@ -215,18 +223,19 @@ void louvain_core(
 	vector<vector<double>> newW = W;
 	vector<int>Zt = C; 
 	vector<int>Ct = C;
-	int prevGraphSize = C.size();
+	unsigned int prevGraphSize = C.size();
 	double Qbest = calc_Qmod(newA, newW, Zt, M); 
 	do{
 		prevGraphSize = newA.size();
 		
-	 	modularity_label_switching(newA, newW, Zt, M);
+	 	modularity_label_switching(newA, newW, Zt, M, mtrnd);
 		double Qt = calc_Qmod(newA, newW, Zt, M);	
 		coarsing(newA,newW,Zt);
 		
 		// update C
 		// Ct = Ct*Zt;
-		for(int i = 0;i<Ct.size();i++){
+		int Ctsize = Ct.size();
+		for(int i = 0;i<Ctsize;i++){
 			Ct[i] = Zt[ Ct[i] ];
 		}
 		
@@ -242,12 +251,14 @@ void louvain(
     const vector<vector<int>>& A,
     const vector<vector<double>>& W,
     const int num_of_runs,
-    vector<vector<bool>>& xlist){
+    vector<vector<bool>>& xlist,
+    mt19937_64& mtrnd
+    ){
 
     int N = A.size();
     vector<int> C(N);
-
-    for(int k = 0;k < xlist.size();k++){
+    int K = xlist.size();
+    for(int k = 0;k < K;k++){
         xlist[k].clear();
     }
     xlist.clear();
@@ -265,7 +276,7 @@ void louvain(
         vector<int> ci = C;
         double Qi = 0.0;
 
-        louvain_core(A, W, ci, M);
+        louvain_core(A, W, ci, M, mtrnd);
 	Qi = calc_Qmod(A, W, ci, M);
 	
         if (Qi > Q) {
@@ -273,7 +284,7 @@ void louvain(
             cbest = ci;
         }
     }
-    int K = *max_element(cbest.begin(),cbest.end()) + 1; 
+    K = *max_element(cbest.begin(),cbest.end()) + 1; 
     for(int k = 0; k < K; k++){
 	vector<bool> tmp(N);
     	for(int i = 0; i < N; i++){

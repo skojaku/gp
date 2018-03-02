@@ -54,11 +54,12 @@ void estimate_statistical_significance(
     const int num_of_rand_nets,
     vector<double>& p_values,
     vector<int>& nhat,
-    vector<double>& qhat);
+    vector<double>& qhat,
+    vector<int>& rgindex);
 
 /* 
 *
 * Impliment the following functions
 *
 * */
-void init_random_number_generator();
+mt19937_64 init_random_number_generator();

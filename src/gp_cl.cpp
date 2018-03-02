@@ -18,9 +18,6 @@
 #include <cmath>
 #include <cfloat>
 #include "gp.h"
-#include "quality_functions.h"
-#include "community-detection-algorithms/comalgorithms.h"
-#include "qstest/qstest.cpp"
 
 #include <string>
 #include <stdio.h>
@@ -38,12 +35,13 @@ void writeLabels(const string filename, const vector<vector<bool>>& xlist, const
 void usage();
 
 // initialise mtrnd
-void init_random_number_generator()
+mt19937_64 init_random_number_generator()
 {
+    mt19937_64 mtrnd;
     random_device r;
     seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
     mtrnd.seed(seed);
-
+    return mtrnd;
     /* Use the following code if you cannot initialise mtrnd with random_device */
     /*
 	int seeds[624];
@@ -144,14 +142,14 @@ int main(int argc, char* argv[])
     cout << "      - quality function: "<< qfunc_name<< endl;
     cout << "      - Number of runs: "<< num_of_runs<< endl;
     cout << "      - Number of communities: "<< K<< endl;
-    init_random_number_generator();
+    mt19937_64  mtrnd = init_random_number_generator();
     vector<vector<bool>> xlist;
     double Qr = -numeric_limits<double>::max();
     mcmc_qfunc = quality_functions[qfunc_name];
     mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
     for (int r = 0; r < num_of_runs; r++) {
         vector<vector<bool>> xlist_tmp(K, vector<bool>(N, false) );
-    	community_detection[alg_name](A, W, xlist_tmp);
+    	community_detection[alg_name](A, W, xlist_tmp, mtrnd);
         double Qi = quality_functions[qfunc_name](A, W, xlist_tmp);
         if(Qi != Qi) {continue;}
         
@@ -168,6 +166,7 @@ int main(int argc, char* argv[])
     vector<double> p_values(K, 0.0);
     vector<int> nhat;
     vector<double> qhat;
+    vector<int> rgindex;
     if(alpha < 1){
     	cout << "   Significance test..."<<endl;
     	cout << "      - size function: "<< sfunc_name<< endl;
@@ -179,7 +178,7 @@ int main(int argc, char* argv[])
         mcmc_qfunc = quality_functions[qfunc_name];
         mcmc_qfunc_ind = quality_functions_ind[qfunc_name];
         mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
-    	estimate_statistical_significance(A, W, xlist, mcmc_qfunc, mcmc_qfunc_ind, size_functions[sfunc_name], community_detection[alg_name], num_of_runs, num_of_rand_nets, p_values, nhat, qhat);
+    	estimate_statistical_significance(A, W, xlist, mcmc_qfunc, mcmc_qfunc_ind, size_functions[sfunc_name], community_detection[alg_name], num_of_runs, num_of_rand_nets, p_values, nhat, qhat, rgindex);
        	cout <<"   end"<<endl<<endl;
     }
    
@@ -238,10 +237,10 @@ void usage()
          << "	    - louvain: Louvain algorithm" << endl
          << endl\
          << "	\e[1m-q=[Q]\e[0m Specify one of the following quality functions:" << endl
-         << "	    - int: average degree of each community" << endl
-         << "	    - rcut: ratio cut" << endl
-         << "	    - ncut: normalised cut" << endl
-         << "	    - mod: modularity" << endl
+         << "	    - qint: average degree of each community" << endl
+         << "	    - qext: ratio cut" << endl
+         << "	    - qcnd: normalised cut" << endl
+         << "	    - qmod: modularity" << endl
          << "	    - dcsbm: dcSBM" << endl
          << endl
          << "	\e[1m-k=[K]\e[0m  Set the number of communities to K. (Default: 2)" << endl
@@ -312,7 +311,8 @@ void readEdgeTable(string filename, vector<vector<int>>& A, vector<vector<double
     W = tmp2; 
 
     int wid = 0; 
-    for (int i = 0; i < edgeList.size(); i += 2) {
+    int edgeListsize = edgeList.size();
+    for (int i = 0; i < edgeListsize; i += 2) {
         int sid = edgeList[i];
         int did = edgeList[i + 1];
 	double w = wList[wid];

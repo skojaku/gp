@@ -4,10 +4,8 @@
 #include <cfloat>
 
 #include "gp.h"
-#include "quality_functions.h"
-#include "community-detection-algorithms/comalgorithms.h"
 
-void init_random_number_generator(){
+mt19937_64 init_random_number_generator(){
     	int seeds[624];
        	size_t size = 624*4; //Declare size of data
        	ifstream urandom("/dev/urandom", ios::in | ios::binary); //Open stream
@@ -21,7 +19,13 @@ void init_random_number_generator(){
             		cerr << "Failed to open /dev/urandom" << endl;
        	}
     	seed_seq seed(&seeds[0], &seeds[624]);
+        
+        //random_device rd;
+        //mt19937_64 gen(rd());
+	
+	mt19937_64 mtrnd;
     	mtrnd.seed(seed);
+	return mtrnd;
 }
 
 
@@ -53,7 +57,7 @@ void mexFunction(int nlhs, mxArray* plhs[],
         }
     }
     /* Detect K communities in networks */
-    init_random_number_generator();
+    mt19937_64 mtrnd = init_random_number_generator();
     mcmc_qfunc = quality_functions[qfunc_name];
     mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
     vector<vector<bool>> xlist;
@@ -62,7 +66,7 @@ void mexFunction(int nlhs, mxArray* plhs[],
     double Qr = -numeric_limits<double>::max();
     for (int r = 0; r < num_of_runs; r++) {
         vector<vector<bool>> xlist_tmp(K, vector<bool>(N, false) );
-    	community_detection[alg_name](A, W, xlist_tmp);
+    	community_detection[alg_name](A, W, xlist_tmp, mtrnd);
     
         double Qi = mcmc_qfunc(A, W, xlist_tmp);
         if(Qi != Qi) {continue;}

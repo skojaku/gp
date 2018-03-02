@@ -4,29 +4,6 @@
 #include <cfloat>
 #include "gp.h"
 
-mt19937_64 init_random_number_generator(){
-    	int seeds[624];
-       	size_t size = 624*4; //Declare size of data
-       	ifstream urandom("/dev/urandom", ios::in | ios::binary); //Open stream
-       	if (urandom) //Check if stream is open
-       	{
-       	    urandom.read(reinterpret_cast<char*>(seeds), size); //Read from urandom
-       	    urandom.close(); //close stream
-       	}
-       	else //Open failed
-       	{
-            		cerr << "Failed to open /dev/urandom" << endl;
-       	}
-    	seed_seq seed(&seeds[0], &seeds[624]);
-        
-        //random_device rd;
-        //mt19937_64 gen(rd());
-	
-	mt19937_64 mtrnd;
-    	mtrnd.seed(seed);
-	return mtrnd;
-}
-
 
 /* ---- Mex functions ----*/
 void mexFunction(int nlhs, mxArray* plhs[],
@@ -78,7 +55,6 @@ void mexFunction(int nlhs, mxArray* plhs[],
     vector<int> nhat;
     vector<int> rgindex;
     vector<double> qhat;
-    //init_random_number_generator();
 	
     mcmc_qfunc = quality_functions[qfunc_name];
     mcmc_qfunc_ind = quality_functions_ind[qfunc_name];

@@ -34,32 +34,6 @@ void writeLabels(const string filename, const vector<vector<bool>>& xlist, const
 
 void usage();
 
-// initialise mtrnd
-mt19937_64 init_random_number_generator()
-{
-    mt19937_64 mtrnd;
-    random_device r;
-    seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
-    mtrnd.seed(seed);
-    return mtrnd;
-    /* Use the following code if you cannot initialise mtrnd with random_device */
-    /*
-	int seeds[624];
-	size_t size = 624*4; //Declare size of data
-	std::ifstream urandom("/dev/urandom", std::ios::in | std::ios::binary); //Open stream
-	if (urandom) //Check if stream is open
-	{
-	    urandom.read(reinterpret_cast<char*>(seeds), size); //Read from urandom
-	    urandom.close(); //close stream
-	}
-	else //Open failed
-	{
-	    		std::cerr << "Failed to open /dev/urandom" << std::endl;
-	}
-	std::seed_seq seed(&seeds[0], &seeds[624]);
-	mtrnd.seed(seed);
-*/
-}
 
 int main(int argc, char* argv[])
 {
@@ -142,7 +116,10 @@ int main(int argc, char* argv[])
     cout << "      - quality function: "<< qfunc_name<< endl;
     cout << "      - Number of runs: "<< num_of_runs<< endl;
     cout << "      - Number of communities: "<< K<< endl;
-    mt19937_64  mtrnd = init_random_number_generator();
+    mt19937_64 mtrnd;
+    random_device r;
+    seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
+    mtrnd.seed(seed);
     vector<vector<bool>> xlist;
     double Qr = -numeric_limits<double>::max();
     mcmc_qfunc = quality_functions[qfunc_name];

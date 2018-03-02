@@ -150,7 +150,11 @@ void estimate_statistical_significance(
     }
     vector<mt19937_64> mtrnd_list(numthread);
     for(int i = 0; i < numthread; i++){
-		mtrnd_list[i] = init_random_number_generator();
+	mt19937_64 mtrnd;
+    	random_device r;
+    	seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
+    	mtrnd.seed(seed);
+	mtrnd_list[i] = mtrnd;
     }
 
     /* Generate \hat q^{(s)} and \hat n^{(s)} (1 \leq s \leq S) */
@@ -163,7 +167,7 @@ void estimate_statistical_significance(
         vector<vector<int>> A_rand(N, vector<int>(0));
         vector<vector<double>> W_rand(N, vector<double>(0));
         
-       int tid = omp_get_thread_num();
+        int tid = omp_get_thread_num();
         mt19937_64 mtrnd = mtrnd_list[tid];
        	generate_randomised_net(deg, nodes, A_rand, W_rand, isunweighted, mtrnd);
         // Detect core-periphery pairs using the KM algorithm

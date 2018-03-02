@@ -33,6 +33,22 @@ This creates the following two files:
 
 For MATLAB user, copy gp.m, gp_mex.mexa64 and qstest_mex.mexa64 to your working directly. 
 
+You may have the following message:
+
+```bash
+Warning: You are using gcc version '5.4.0'. The version of gcc is not supported. 
+The version currently supported with MEX is '4.9.x'. 
+```
+
+This means you are required to change the version of g++ compiler. 
+To remedy this, modify a line in ''./makefile'' as follows: 
+
+```bash
+MEXCOMPILER := g++-(the version compatible with your mex compiler, e.g., g++-4.9) 
+```
+
+See https://uk.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html for detail.
+
 # Usage
 
 ## Matlab

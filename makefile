@@ -2,13 +2,13 @@
 .PHONY: all
 
 #MEXFLAGS := -fopenmp
-#MEXOFLAGS := -O3
-MEXOFLAGS := -Wall -g -fopenmp
-MEXCOMPILER := gcc
+MEXOFLAGS := -O3 -fopenmp
+#MEXOFLAGS := -Wall -g -fopenmp
+MEXCOMPILER := g++-4.7
 #MEXCOMPILER := /usr/bin/gcc-4.9
 CC := g++
 
-CFLAGS := -O -std=c++11 -fopenmp -Wall -g
+CFLAGS := -O3 -std=c++11 -fopenmp
 
 # for linux
 all: gp_mex.mexa64 gp qstest_mex.mexa64

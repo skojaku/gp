@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     string alg_name = "kl";
     string qfunc_name = "dcsbm";
     string sfunc_name = "edges";
-    while ((opt = getopt(argc, argv, "h:k:r:a:q:s:o:l")) != -1) {
+    while ((opt = getopt(argc, argv, "h:k:r:a:q:s:o:l:")) != -1) {
         switch (opt) {
         case 'h':
             usage();
@@ -210,6 +210,7 @@ void usage()
          << endl
          << "	\e[1m-o=[ALG]\e[0m Specify one of the following optimisation algorithms" << endl
          << "	    - kl: Kernighan-Lin algorithm" << endl
+         << "	    - ls: Label switching algorithm" << endl
          << "	    - mcmc: Markov chain monte carlo algorithm" << endl
          << "	    - louvain: Louvain algorithm" << endl
          << endl\

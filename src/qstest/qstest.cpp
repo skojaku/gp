@@ -156,7 +156,6 @@ void estimate_statistical_significance(
     	mtrnd.seed(seed);
 	mtrnd_list[i] = mtrnd;
     }
-
     /* Generate \hat q^{(s)} and \hat n^{(s)} (1 \leq s \leq S) */
     #ifdef _OPENMP
     #pragma omp parallel for shared(nhat, qhat, deg, nodes, mtrnd_list)
@@ -181,8 +180,8 @@ void estimate_statistical_significance(
 		vector<int> cbest;
 		for (int r = 0; r < num_of_runs; r++) {
 	            vector<vector<bool>> x_rand_tmp(K, vector<bool>(N, false) );
-		    
-	            find_communities(A_rand, W_rand, x_rand_tmp, mtrnd);
+	            
+		    find_communities(A_rand, W_rand, x_rand_tmp, mtrnd);
 
 		    double Qi = calc_q(A_rand, W_rand, x_rand_tmp);
 		    if(Qi != Qi) {continue;}

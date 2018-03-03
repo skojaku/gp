@@ -71,6 +71,7 @@ param = g.init(); % initialise
      * dcsbm - Degree-corrected stochastic block model
    * `param.algorithm` - Optimisation algorithm. Default algorithm = 'kl'. The following algorithms are available: 
      * kl - Kernighan-Lin algorithm 
+     * ls - Label Switching algorithm 
      * mcmc - Markov chain monte carlo 
      * louvain - Markov chain monte carlo 
    * `param.K` - Number of communities. Default K=2. 
@@ -126,6 +127,7 @@ cids = g.detect(A, param);
    * -r=[R] Run the algorithm R times. (Default: 10)
    * -l=[A] Specify one of the following algorithms. (Default: 'kl')
      * 'kl': Kernighan-Lin algorithm
+     * 'ls' - Label Switching algorithm 
      * 'mcmc': Markov chain monte carlo algorithm
      * 'louvain': Louvain algorithm 
    * -q: Quality function. (Default: 'dcsbm') 

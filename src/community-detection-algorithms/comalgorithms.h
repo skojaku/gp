@@ -6,6 +6,7 @@
 #include "mcmc.h"
 #include "kernighan_lin.h"
 #include "louvain.h"
+#include "label_switching.h"
 
 /* ---- Algorithm for finding communities in networks ----*/
 double (*mcmc_qfunc)(const vector<vector<int> >&, const vector<vector<double> >&, const vector<vector<bool>>&);
@@ -38,11 +39,15 @@ void mylouvain(const vector<vector<int> >&A, const vector<vector<double> >&W, ve
         louvain(A, W, 1, xlist, mtrnd);
 }
 
+void mylabel_switching(const vector<vector<int> >&A, const vector<vector<double> >&W, vector<vector<bool>>& xlist, mt19937_64& mtrnd){
+	label_switching(A, W, xlist, mcmc_qfunc, mcmc_qfunc_diff, mtrnd);	
+}
 
 typedef void (*com_detect_func)(const vector<vector<int> >&, const vector<vector<double>>&, vector<vector<bool>>&, mt19937_64&);
 map<string, com_detect_func> community_detection = {
 	{"kl", mykl},
 	{"mcmc", mymcmc},
-	{"louvain", mylouvain}
+	{"louvain", mylouvain},
+	{"ls", mylabel_switching}
 };
 

@@ -19,9 +19,33 @@ Indeed, the community-detection algorithms detect communities even if there is n
 Therefore, it is important to check the significance of each detected community.
 I implemented the (q,s)-test \[[8](https://arxiv.org/abs/1712.00298)\] to compute the statistical significance of the detected communities.  
 
-# Compile 
+Table of Contents
+=================
 
-## C++ 
+* [gp](#gp)
+* [C\+\+](#c)
+  * [Compile](#compile)
+  * [Usage](#usage)
+      * [Input](#input)
+  * [Example (src/cpp/example\.sh)](#example-srccppexamplesh)
+* [Matlab](#matlab)
+  * [Compile](#compile-1)
+  * [Usage](#usage-1)
+      * [Input](#input-1)
+      * [Output](#output)
+  * [Example src/matlab/example\.m](#example-srcmatlabexamplem)
+* [Python](#python)
+  * [Compile](#compile-2)
+  * [Usage](#usage-2)
+      * [Input](#input-2)
+      * [Output](#output-1)
+  * [Example src/python/example\.py](#example-srcpythonexamplepy)
+* [Requirements](#requirements)
+
+
+# C++ 
+
+## Compile 
 
 This package contains a command-line client.
 To compile, run 
@@ -33,50 +57,7 @@ make cpp
 This creates the command-line client ''gp'' in the current directory.
 To test, run ``./gp''
 
-
-## Matlab wrapper 
-
-To compile, run 
-
-```bash 
-make matlab
-```
-
-This creates a mex file, gp_mex.mexa64 (the file extension may be different depending on OS).
-
-Copy src/matlab/gp.m, src/matlab/gp_mex.mexa64 and src/matlab/qstest_mex.mexa64 to your working directory. 
-
-You may have the following message:
-
-```bash
-Warning: You are using gcc version '5.4.0'. The version of gcc is not supported. 
-The version currently supported with MEX is '4.9.x'. 
-```
-
-This means you are required to change the version of g++ compiler. 
-To remedy this, modify a line in ''./src/matlab/makefile'' as follows: 
-
-```bash
-MEXCOMPILER := g++-(the version compatible with your mex compiler, e.g., g++-4.9) 
-```
-
-See https://uk.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html for detail.
-
-
-## Python wrapper 
-
-To compile, run 
-
-```bash 
-make python
-```
-
-This creates a shared library ''src/python/gp.cpython-36m-x86_64-linux-gnu.so'' callable from python. 
-Copy the shared library to your working directory. 
-
-# Usage
-
-## C++
+## Usage 
  
 ``` c++
 ./gp [input-file] [output-file] [options]
@@ -115,15 +96,46 @@ Copy the shared library to your working directory.
 	    - 'nodes': number of nodes in a community
 	    - 'edges': number of edges incident to a community
   
-#### Example (src/cpp/example.sh)
+## Example (src/cpp/example.sh)
   
 ```bash
 ./gp links_karate.dat result.dat -o louvain -a 0.01 -q mod 
 ./gp links_karate.dat result.dat -o kl -a 0.01 -q dcsbm -k 5 
 ```
 
-## Matlab
- 
+
+# Matlab
+
+## Compile 
+
+To compile, run 
+
+```bash 
+make matlab
+```
+
+This creates a mex file, gp_mex.mexa64 (the file extension may be different depending on OS).
+
+Copy src/matlab/gp.m, src/matlab/gp_mex.mexa64 and src/matlab/qstest_mex.mexa64 to your working directory. 
+
+You may have the following message:
+
+```bash
+Warning: You are using gcc version '5.4.0'. The version of gcc is not supported. 
+The version currently supported with MEX is '4.9.x'. 
+```
+
+This means you are required to change the version of g++ compiler. 
+To remedy this, modify a line in ''./src/matlab/makefile'' as follows: 
+
+```bash
+MEXCOMPILER := g++-(the version compatible with your mex compiler, e.g., g++-4.9) 
+```
+
+See https://uk.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html for detail.
+
+## Usage 
+
 ```Matlab
 g = gp(); 
 param = g.init(); % initialise
@@ -161,7 +173,7 @@ param = g.init(); % initialise
  * `h` - Column vector of length N, where h[i] = 1 or h[i] = 0 indicates that the node i belongs to the significant community, respectively.  
  * `pvals` - Column vector of length K, pvals[k] is the p-value of the kth community.  
   
-#### Example src/matlab/example.m
+## Example src/matlab/example.m
   
 ```Matlab
 T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
@@ -174,7 +186,21 @@ param = g.init(); % initialise
 cids = g.detect(A, param);
 ```
 
-## Python
+
+# Python
+
+## Compile
+
+To compile, run 
+
+```bash 
+make python
+```
+
+This creates a shared library ''src/python/gp.cpython-36m-x86_64-linux-gnu.so'' callable from python. 
+Copy the shared library to your working directory. 
+
+## Usage
  
 ```python
 import gp as g
@@ -211,7 +237,7 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
    * communities[1] - Numpy array of length N. communities[1][i] indicates the p-value of the community to which node i belongs.
    * communities[2] - Numpy array of length N. communities[2][i] = True or False indicates the significant or insignificant communities, respectively.
   
-#### Example src/python/example.py
+## Example src/python/example.py
   
 ```python
 import csv

@@ -7,5 +7,6 @@ A = sparse(T(:,1), T(:,2), T(:,3), N, N);
 g = gp();
 param = g.init(); % initialise
 cids = g.detect(A, param);
+cids
 
 end

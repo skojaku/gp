@@ -5,6 +5,7 @@
 
 #include "../lib/gp.h"
 
+
 /* ---- Mex functions ----*/
 void mexFunction(int nlhs, mxArray* plhs[],
     int nrhs, const mxArray* prhs[])
@@ -32,10 +33,8 @@ void mexFunction(int nlhs, mxArray* plhs[],
         }
     }
     /* Detect K communities in networks */
-    mt19937_64 mtrnd;
-    random_device r;
-    seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
-    mtrnd.seed(seed);
+    mt19937_64 mtrnd = init_random_number_generator();
+
     mcmc_qfunc = quality_functions[qfunc_name];
     mcmc_qfunc_diff = quality_functions_diff[qfunc_name];
     vector<vector<bool>> xlist;

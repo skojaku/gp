@@ -4,7 +4,7 @@
 #MEXFLAGS := -fopenmp
 MEXOFLAGS := -O3 -fopenmp
 #MEXOFLAGS := -Wall -g -fopenmp
-MEXCOMPILER := g++-4.7
+MEXCOMPILER := g++
 #MEXCOMPILER := /usr/bin/gcc-4.9
 CC := g++
 

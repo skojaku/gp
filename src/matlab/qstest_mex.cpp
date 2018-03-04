@@ -2,7 +2,7 @@
 #include <map>
 #include <cmath>
 #include <cfloat>
-#include "gp.h"
+#include "../lib/gp.h"
 
 
 /* ---- Mex functions ----*/

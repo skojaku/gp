@@ -1,28 +1,18 @@
+
 # Makefile
 .PHONY: all
 
-#MEXFLAGS := -fopenmp
-MEXOFLAGS := -O3 -fopenmp
-#MEXOFLAGS := -Wall -g -fopenmp
-MEXCOMPILER := g++-4.7
-#MEXCOMPILER := /usr/bin/gcc-4.9
-CC := g++
+cpp:
+	make -C src/cpp
 
-CFLAGS := -O3 -std=c++11 -fopenmp
+matlab:
+	make -C src/matlab
 
-# for linux
-all: gp_mex.mexa64 gp qstest_mex.mexa64
-
-gp_mex.mexa64: ./src/gp.h ./src/community-detection-algorithms/* ./src/gp_mex.cpp ./src/quality_functions.h
-	mex CXXFLAGS='$$CXXFLAGS $(MEXFLAGS)' LDFLAGS='$$LDFLAGS $(MEXFLAGS)' CXXOPTIMFLAGS='$(MEXOFLAGS) -DNDEBUG' LDOPTIMFLAGS='$(MEXOFLAGS)' GCC='$(MEXCOMPILER)' src/gp_mex.cpp
-
-gp: ./src/gp.h ./src/community-detection-algorithms/* ./src/gp_cl.cpp ./src/quality_functions.h
-	$(CC) $(CFLAGS) -o gp src/gp_cl.cpp 
-
-qstest_mex.mexa64: ./src/qstest/* ./src/qstest_mex.cpp ./src/community-detection-algorithms/* ./src/quality_functions.h
-	mex CXXFLAGS='$$CXXFLAGS $(MEXFLAGS)' LDFLAGS='$$LDFLAGS $(MEXFLAGS)' CXXOPTIMFLAGS='$(MEXOFLAGS) -DNDEBUG' LDOPTIMFLAGS='$(MEXOFLAGS)' GCC='$(MEXCOMPILER)' src/qstest_mex.cpp
-	
+python:
+	make -C src/python
 
 .PHONY: clean
 clean:
-	$(RM) *.mexa64 ./gp  
+	make -C src/cpp clean
+	make -C src/matlab clean
+	make -C src/python clean

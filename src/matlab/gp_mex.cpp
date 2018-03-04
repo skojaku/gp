@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cfloat>
 
-#include "gp.h"
+#include "../lib/gp.h"
 
 /* ---- Mex functions ----*/
 void mexFunction(int nlhs, mxArray* plhs[],

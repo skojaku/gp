@@ -12,12 +12,12 @@ These algorithms seek communities in networks by optimising the following qualit
  * Ratio cut criterion \[[6](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
  * Normalised cut criterion \[[6](http://www.tandfonline.com/doi/abs/10.1080/15427951.2009.10129177)\]
  * Modularity \[[7](http://www.pnas.org/content/103/23/8577)\]
- * Log likelihood for the degree-corrected stochastic block model \[[3](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\]
+ * Log likelihood for the degree-corrected stochastic block model \[[8](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.83.016107)\]
 
 Some detected communities may be insignificant.
 Indeed, the community-detection algorithms detect communities even if there is no community in networks.
 Therefore, it is important to check the significance of each detected community.
-I implemented the (q,s)-test \[[8](https://arxiv.org/abs/1712.00298)\] to compute the statistical significance of the detected communities.  
+I implemented the (q,s)-test \[[9](https://arxiv.org/abs/1712.00298)\] to compute the statistical significance of the detected communities.  
 
 Table of Contents
 =================

@@ -215,7 +215,6 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
   
 ```python
 import csv
-from scipy import sparse
 import numpy as np
 import gp as g
 

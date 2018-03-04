@@ -1,5 +1,4 @@
 import csv
-from scipy import sparse
 import numpy as np
 import gp as g
 

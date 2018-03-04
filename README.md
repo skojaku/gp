@@ -22,16 +22,15 @@ I implemented the (q,s)-test \[[8](https://arxiv.org/abs/1712.00298)\] to comput
 Table of Contents
 =================
 
-* [gp](#gp)
 * [C\+\+](#c)
 * [Matlab](#matlab)
 * [Python](#python)
 * [Requirements](#requirements)
 
 
-# C++ 
+## C++ 
 
-## Compile 
+### Compile 
 
 This package contains a command-line client.
 To compile, run 
@@ -43,7 +42,7 @@ make cpp
 This creates the command-line client ''gp'' in the current directory.
 To test, run ``./gp''
 
-## Usage 
+### Usage 
  
 ``` c++
 ./gp [input-file] [output-file] [options]
@@ -82,7 +81,7 @@ To test, run ``./gp''
 	    - 'nodes': number of nodes in a community
 	    - 'edges': number of edges incident to a community
   
-## Example (src/cpp/example.sh)
+### Example (src/cpp/example.sh)
   
 ```bash
 ./gp links_karate.dat result.dat -o louvain -a 0.01 -q mod 
@@ -90,9 +89,9 @@ To test, run ``./gp''
 ```
 
 
-# Matlab
+## Matlab
 
-## Compile 
+### Compile 
 
 To compile, run 
 
@@ -120,7 +119,7 @@ MEXCOMPILER := g++-(the version compatible with your mex compiler, e.g., g++-4.9
 
 See https://uk.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html for detail.
 
-## Usage 
+### Usage 
 
 ```Matlab
 g = gp(); 
@@ -159,7 +158,7 @@ param = g.init(); % initialise
  * `h` - Column vector of length N, where h[i] = 1 or h[i] = 0 indicates that the node i belongs to the significant community, respectively.  
  * `pvals` - Column vector of length K, pvals[k] is the p-value of the kth community.  
   
-## Example src/matlab/example.m
+### Example src/matlab/example.m
   
 ```Matlab
 T = readtable('links_karate.dat', 'Delimiter', '\t', 'HeaderLines',0);
@@ -173,9 +172,9 @@ cids = g.detect(A, param);
 ```
 
 
-# Python
+## Python
 
-## Compile
+### Compile
 
 To compile, run 
 
@@ -186,7 +185,7 @@ make python
 This creates a shared library ''src/python/gp.cpython-36m-x86_64-linux-gnu.so'' callable from python. 
 Copy the shared library to your working directory. 
 
-## Usage
+### Usage
  
 ```python
 import gp as g
@@ -223,7 +222,7 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
    * communities[1] - Numpy array of length N. communities[1][i] indicates the p-value of the community to which node i belongs.
    * communities[2] - Numpy array of length N. communities[2][i] = True or False indicates the significant or insignificant communities, respectively.
   
-## Example src/python/example.py
+### Example src/python/example.py
   
 ```python
 import csv
@@ -239,7 +238,7 @@ communities = g.detect(edges, algorithm = 'kl', qfunc = 'dcsbm', significance_le
 print(communities)
 ```
 
-# Requirements
+## Requirements
 
  * Matlab 2012 or later 
  * Python3.4 or later

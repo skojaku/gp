@@ -24,22 +24,8 @@ Table of Contents
 
 * [gp](#gp)
 * [C\+\+](#c)
-  * [Compile](#compile)
-  * [Usage](#usage)
-      * [Input](#input)
-  * [Example (src/cpp/example\.sh)](#example-srccppexamplesh)
 * [Matlab](#matlab)
-  * [Compile](#compile-1)
-  * [Usage](#usage-1)
-      * [Input](#input-1)
-      * [Output](#output)
-  * [Example src/matlab/example\.m](#example-srcmatlabexamplem)
 * [Python](#python)
-  * [Compile](#compile-2)
-  * [Usage](#usage-2)
-      * [Input](#input-2)
-      * [Output](#output-1)
-  * [Example src/python/example\.py](#example-srcpythonexamplepy)
 * [Requirements](#requirements)
 
 

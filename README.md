@@ -144,7 +144,7 @@ param = g.init(); % initialise
      * kl - Kernighan-Lin algorithm 
      * ls - Label Switching algorithm 
      * mcmc - Markov chain monte carlo 
-     * louvain - Markov chain monte carlo 
+     * louvain - Louvain algorithm 
    * `param.K` - Number of communities. Default K=2. 
    * `param.num_of_runs` - Number of runs. Default num_of_runs = 1. 
    * `param.significance_level` - Significance level. Default significance_level = 0.05.
@@ -195,7 +195,7 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
      * kl - Kernighan-Lin algorithm 
      * ls - Label Switching algorithm 
      * mcmc - Markov chain monte carlo 
-     * louvain - Markov chain monte carlo 
+     * louvain - Louvain algorithm 
    * `num_of_runs` - Number of runs. Default num_of_runs = 1. 
    * `significance_level` - Significance level. Default significance_level = 0.05.
    * `sfunc` - Size of community. The following size functions are available:
@@ -208,8 +208,8 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
 
  * `communities` - List of length 3. 
    * communities[0] - Numpy array of length N, where N is the number of nodes. communities[0][i] indicates the index of the community to which node i belongs.
-   * communities[1] - Numpy array of length N, where N is the number of nodes. communities[1][i] indicates the p-value of the community to which node i belongs.
-   * communities[2] - Numpy array of length N, where N is the number of nodes. communities[2][i] = True or False indicates the significant or insignificant communities, respectively.
+   * communities[1] - Numpy array of length N. communities[1][i] indicates the p-value of the community to which node i belongs.
+   * communities[2] - Numpy array of length N. communities[2][i] = True or False indicates the significant or insignificant communities, respectively.
   
 #### Example src/python/example.py
   

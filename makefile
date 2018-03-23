@@ -9,6 +9,7 @@ matlab:
 	make -C src/matlab
 
 python:
+	git submodule init
 	git submodule update
 	make -C src/python
 

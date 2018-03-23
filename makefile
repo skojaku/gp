@@ -9,6 +9,7 @@ matlab:
 	make -C src/matlab
 
 python:
+	git submodule update
 	make -C src/python
 
 .PHONY: clean

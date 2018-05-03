@@ -6,7 +6,10 @@
 #include <vector>
 #include <numeric>
 #include <cmath>
+
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 #if !defined(MAX)
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -143,17 +146,20 @@ void estimate_statistical_significance(
     );
    
     // create random number generator per each thread
-    int numthread;
-    # pragma omp parallel
-    {
-    numthread = omp_get_num_threads();
-    }
+    int numthread = 1;
+    #ifdef _OPENMP
+    	# pragma omp parallel
+    	{
+    		numthread = omp_get_num_threads();
+    	}
+    #endif
     vector<mt19937_64> mtrnd_list(numthread);
     for(int i = 0; i < numthread; i++){
 	mt19937_64 mtrnd = init_random_number_generator();
 	mtrnd_list[i] = mtrnd;
     }
     /* Generate \hat q^{(s)} and \hat n^{(s)} (1 \leq s \leq S) */
+    
     #ifdef _OPENMP
     #pragma omp parallel for shared(nhat, qhat, deg, nodes, mtrnd_list)
     #endif
@@ -163,7 +169,12 @@ void estimate_statistical_significance(
         vector<vector<int>> A_rand(N, vector<int>(0));
         vector<vector<double>> W_rand(N, vector<double>(0));
         
-        int tid = omp_get_thread_num();
+        int tid = 0;
+    	#ifdef _OPENMP
+        	tid = omp_get_thread_num();
+    	#endif
+	
+	
         mt19937_64 mtrnd = mtrnd_list[tid];
        	generate_randomised_net(deg, nodes, A_rand, W_rand, isunweighted, mtrnd);
         // Detect core-periphery pairs using the KM algorithm

@@ -194,7 +194,7 @@ communities = g.detect(edges, K, qfunc, algorithm, num_of_runs, significance_lev
  
 #### Input 
 
- * `edges` - Mx3 Numpy array, where M is the number of edges. The first and second columns indicate the IDs of nodes connected by an edge. The third column indicates the weight of the edge.
+ * `edges` - Mx3 Numpy array (should be float array), where M is the number of edges. The first and second columns indicate the IDs of nodes connected by an edge. The third column indicates the weight of the edge. The index should be start from one. 
    * `K` - Number of communities. Default K=2. 
    * `qfunc` - Quality function for communities. Default qfunc= 'dcsbm'. The following quality functions are available:
      * mod - Contribution of a community to the modularity 

@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC -O3 -fopenmp  -shared -Wl,-soname,gp.cpython-35m-x86_64-linux-gnu.so -o gp.cpython-35m-x86_64-linux-gnu.so CMakeFiles/gp.dir/gp.cpp.o -flto 

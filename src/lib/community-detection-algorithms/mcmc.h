@@ -43,6 +43,7 @@ void run_mcmc(
 	int itnum=0;int lastupdate = 0;
 	
 	// randomise 
+/* mute in order not to initialise xlist 
 	for(int i = 0; i < N; i++){
 		int cid = -1;
 		ord[i] = i;
@@ -56,6 +57,7 @@ void run_mcmc(
 			xlist[newcid][i] = true;
 		}
 	}
+*/
 	init_com_param(A,  W, xlist,  C, Nk, Wrs, Dk, toU, SelfLoop, M);
 	
         vector<vector<bool>> xbest=xlist; 

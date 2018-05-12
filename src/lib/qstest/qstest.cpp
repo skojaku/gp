@@ -186,8 +186,15 @@ void estimate_statistical_significance(
 		double Qr = -numeric_limits<double>::max();
 		x_rand.clear();
 		vector<int> cbest;
-		for (int r = 0; r < num_of_runs; r++) {
+		for (int r = 0; r < num_of_runs; r++){
 	            vector<vector<bool>> x_rand_tmp(K, vector<bool>(N, false) );
+			
+		    /* added by kojaku
+         	    for(int i = 0; i < N; i++){
+      			int newcid = std::uniform_int_distribution<>(0, K-1)(mtrnd);
+      			x_rand_tmp[newcid][i] = true;
+      		    }
+                    */
 	            
 		    find_communities(A_rand, W_rand, x_rand_tmp, mtrnd);
 

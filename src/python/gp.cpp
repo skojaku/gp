@@ -59,7 +59,7 @@ void readEdgeTable(py::array_t<double> edges_array_t, vector<vector<int>>& A, ve
     }
 }
 
-auto detect(py::array_t<double> edges, int K, string qfunc, string algorithm, int num_of_runs, double significance_level, string sfunc, int num_of_rand_nets ){
+auto detect(py::array_t<double> edges, int K, string qfunc, string algorithm, int num_of_runs, double significance_level, string sfunc, int num_of_rand_nets, py::array_t<int> Cinit_array_t ){
         int N = 0;	
         int M = 0;	
         vector<vector<int> > A;
@@ -70,6 +70,7 @@ auto detect(py::array_t<double> edges, int K, string qfunc, string algorithm, in
     	random_device r;
     	seed_seq seed{ r(), r(), r(), r(), r(), r(), r(), r() };
     	mtrnd.seed(seed);
+        auto Cinit = Cinit_array_t.data();
 	
     	vector<vector<bool>> xlist;
     	double Qr = -numeric_limits<double>::max();
@@ -77,6 +78,12 @@ auto detect(py::array_t<double> edges, int K, string qfunc, string algorithm, in
     	mcmc_qfunc_diff = quality_functions_diff[qfunc];
     	for (int r = 0; r < num_of_runs; r++) {
      		vector<vector<bool>> xlist_tmp(K, vector<bool>(N, false) );
+	
+		for(int i = 0; i < N; i++){
+			xlist_tmp[Cinit[i]][i] = true;
+		}
+		
+		
     		community_detection[algorithm](A, W, xlist_tmp, mtrnd);
         	double Qi = quality_functions[qfunc](A, W, xlist_tmp);
         	if(Qi != Qi) {continue;}
@@ -139,6 +146,7 @@ PYBIND11_MODULE(gp, m){
 	py::arg("num_of_runs") = 10,
 	py::arg("significance_level") = 1.0, 
 	py::arg("sfunc") = "edges",
-	py::arg("num_of_rand_nets") = 500
+	py::arg("num_of_rand_nets") = 500,
+	py::arg("Cinit")
 	);
 }

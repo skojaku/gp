@@ -50,9 +50,6 @@ void label_switching(
 
 	init_com_param(A, W, xlist,  C, Nk, Wrs, Dk, toU, SelfLoop, M);
 
-	// best quality
-	double Q = calc_q(A, W, xlist);
-	double dQ = 0;
 	/* Label switching */
 	bool updated = false;	
 	int itNum = 0;

@@ -266,7 +266,6 @@ void init_by_Lazy_Kernighan_Lin_Algorithm(
 
 	// best quality
 	double Q = calc_q(A, W, xlist);
-	double dQ = 0;
 	/* Label switching */
 	bool updated = false;	
 	int itNum = 0;

@@ -176,13 +176,19 @@ cids = g.detect(A, param);
 
 ### Compile
 
-To compile, run 
+Firstly, install clang in your computer. Then, install pybind11, e.g., 
+
+```bash 
+pip install --user pybind11
+```
+
+Then, run 
 
 ```bash 
 make python
 ```
 
-This creates a shared library ''src/python/gp.cpython-36m-x86_64-linux-gnu.so'' callable from python. 
+This produces a shared library ''src/python/gp.cpython-36m-x86_64-linux-gnu.so'' callable from python. 
 Copy the shared library to your working directory. 
 
 ### Usage
